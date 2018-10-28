@@ -7,9 +7,9 @@ import {
   FormControl
 } from '@angular/forms';
 
-import { UserService } from '../../_services/user.service';
 import { AlertService, AuthenticationService } from '../../_services';
 import { first } from "rxjs/operators";
+import { CustomValidators } from 'ng2-validation';
 
 @Component({
   selector: 'app-login',
@@ -34,7 +34,7 @@ export class LoginComponent implements OnInit {
 
   ngOnInit() {
     this.form = this.fb.group({
-      email: [null, Validators.compose([Validators.required])],
+      email: [null, Validators.compose([Validators.required, CustomValidators.email])],
       password: [null, Validators.compose([Validators.required])]
     });
 
@@ -76,6 +76,7 @@ export class LoginComponent implements OnInit {
             console.error(error);
         }
     );
+    // ruby test >
 
 
   }

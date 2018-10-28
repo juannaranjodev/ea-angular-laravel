@@ -53,6 +53,7 @@ import { AlertService, AuthenticationService, UserService } from './_services';
   providers: [
     //ruby test below
     AuthenticationService,
+    UserService,
     AuthGuard,
     AlertService,
     { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },

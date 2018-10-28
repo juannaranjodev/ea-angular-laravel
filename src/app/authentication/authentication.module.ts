@@ -17,6 +17,7 @@ import { ForgotComponent } from './forgot/forgot.component';
 import { LockscreenComponent } from './lockscreen/lockscreen.component';
 import { LoginComponent } from './login/login.component';
 import { RegisterComponent } from './register/register.component';
+import { ResetPasswordComponent } from './resetpassword/resetpassword.component'; // ruby test
 
 @NgModule({
   imports: [
@@ -36,7 +37,8 @@ import { RegisterComponent } from './register/register.component';
     ForgotComponent,
     LockscreenComponent,
     LoginComponent,
-    RegisterComponent
+    RegisterComponent,
+    ResetPasswordComponent, // ruby test
   ]
 })
 export class AuthenticationModule {}

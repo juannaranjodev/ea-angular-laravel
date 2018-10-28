@@ -9,20 +9,22 @@ import {
 
 // ruby test import
 import { CustomValidators } from 'ng2-validation';
-import { AlertService, UserService } from '../../_services';
+import { AlertService, AuthenticationService } from '../../_services';
 import { first } from "rxjs/operators";
 
 const password = new FormControl('', Validators.required);
 const confirmPassword = new FormControl('', CustomValidators.equalTo(password));
 
 @Component({
-  selector: 'app-register',
-  templateUrl: './register.component.html',
-  styleUrls: ['./register.component.scss']
+  selector: 'app-resetpassword',
+  templateUrl: './resetpassword.component.html',
+  styleUrls: ['./resetpassword.component.scss']
 })
-export class RegisterComponent implements OnInit {
+export class ResetPasswordComponent implements OnInit {
   public form: FormGroup;
   loading: false;
+  tokenParam: string;
+
   private warningMessage: string;
 
 
@@ -30,16 +32,12 @@ export class RegisterComponent implements OnInit {
     private fb: FormBuilder,
     private router: Router,
     // ruby test added
-    private userService: UserService,
+    private authenticationService: AuthenticationService,
     private route: ActivatedRoute,
     private alertService: AlertService) {}
 
   ngOnInit() {
     this.form = this.fb.group({
-      email: [
-        null,
-        Validators.compose([Validators.required, CustomValidators.email])
-      ],
       password: password,
       confirmPassword: confirmPassword
     });
@@ -47,21 +45,18 @@ export class RegisterComponent implements OnInit {
 
   onSubmit() {
     // ruby test <
+    this.route.params.subscribe(params => { this.tokenParam = params['id']; });
+    let array1 = this.tokenParam.split('_FAI35_');
+    let email = atob(array1[0]);
+    let md_password = array1[1];
+   
     if(this.form.invalid){
       return;
     }
-
-    console.log("ruby: login component, email = ", this.form.controls.email.value);
-    let user = {
-      name: 'My Name',
-      email: this.form.controls.email.value,
-      password: this.form.controls.password.value,
-    };
-
-    this.userService.register(
-      'My Name',
-      this.form.controls.email.value,
+    this.authenticationService.resetPassword(
       this.form.controls.password.value,
+      md_password,
+      email
     )
     .pipe(first())
     .subscribe(
@@ -69,14 +64,12 @@ export class RegisterComponent implements OnInit {
             console.log("ruby: test subscribe,", res);
             // check for errors
             this.warningMessage = '';
-            // if not errors - navigate to home
-            // console.log("ruby: res.success", res.success);
-            if (res.token) {
+            if (res.success) {
               this.router.navigate(['/authentication/login']);
             }
         },
         error => {
-            console.log('ruby : failed to login');
+            console.log('ruby : failed to reset password');
             // this.warningMessage = "Invalid Credentials!";
             // this.error = error;
             this.loading = false;
