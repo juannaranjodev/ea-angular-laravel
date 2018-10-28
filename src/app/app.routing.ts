@@ -3,12 +3,13 @@ import { Routes } from '@angular/router';
 import { FullComponent } from './layouts/full/full.component';
 // ruby test below
 import { AppBlankComponent } from './layouts/blank/blank.component';
-
+import { AuthGuard } from './_guards';
 
 export const AppRoutes: Routes = [
   {
     path: '',
     component: FullComponent,
+    canActivate: [AuthGuard], // ruby test
     children: [
       {
         path: '',
@@ -22,7 +23,7 @@ export const AppRoutes: Routes = [
       },
       {
         path: 'starter',
-        loadChildren: './starter/starter.module#StarterModule'
+        loadChildren: './starter/starter.module#StarterModule',
       },
       {
         path: 'icons',
