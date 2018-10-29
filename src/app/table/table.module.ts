@@ -10,6 +10,7 @@ import { TablesRoutes } from './table.routing';
 import { Ng2SmartTableModule } from 'ng2-smart-table';
 
 import { TableComponent } from './table.component';
+import { LicenseComponent } from './license/license.component';
 
 @NgModule({
   imports: [
@@ -23,6 +24,7 @@ import { TableComponent } from './table.component';
   ],
   declarations: [
     TableComponent,
+    LicenseComponent
   ]
 })
 export class TablesModule {}

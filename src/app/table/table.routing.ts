@@ -1,6 +1,7 @@
 import { Routes } from '@angular/router';
 
 import { TableComponent } from './table.component';
+import { LicenseComponent } from './license/license.component';
 
 export const TablesRoutes: Routes = [
   {
@@ -9,6 +10,10 @@ export const TablesRoutes: Routes = [
       {
         path: '',
         component: TableComponent
+      },
+      {
+        path: 'license/:id',
+        component: LicenseComponent
       },
     ]
   }

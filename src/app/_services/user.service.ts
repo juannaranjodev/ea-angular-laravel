@@ -15,7 +15,7 @@ export class UserService {
     }
 
     getById(id: number) {
-        return this.http.get(`${this.apiUrl}/users/` + id);
+        return this.http.get<any>(`${this.apiUrl}/users/` + id);
     }
 
     register(name: string, email: string, password: string) {

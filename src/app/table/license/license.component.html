@@ -2,13 +2,8 @@
     <div fxFlex.gt-sm="100" fxFlex.gt-xs="100" fxFlex="100">
         <mat-card>
             <mat-card-content>
-                <mat-card-title>EA Data Table</mat-card-title>
-                <div class="bg-light p-10 p-r-20 p-l-20">
-                    <mat-form-field>
-                        <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Filter">
-                    </mat-form-field>
-   
-                </div>
+                <mat-card-title>License Data</mat-card-title>
+ 
                 <div class="table-rasponsive">
                     <mat-table [dataSource]="dataSource" matSort>
 
@@ -25,14 +20,20 @@
                         </ng-container>
 
                         <!-- Name Column -->
-                        <ng-container matColumnDef="ea_name">
-                            <mat-header-cell *matHeaderCellDef mat-sort-header> EA Name </mat-header-cell>
-                            <mat-cell *matCellDef="let row"> {{row.ea_name}} </mat-cell>
+                        <ng-container matColumnDef="account_number">
+                            <mat-header-cell *matHeaderCellDef mat-sort-header> Account Number </mat-header-cell>
+                            <mat-cell *matCellDef="let row"> {{row.account_number}} </mat-cell>
+                        </ng-container>
+
+                        <!-- Hash Key Column -->
+                        <ng-container matColumnDef="hash_key">
+                            <mat-header-cell *matHeaderCellDef mat-sort-header> Hash Key </mat-header-cell>
+                            <mat-cell *matCellDef="let row"> {{row.hash_key}} </mat-cell>
                         </ng-container>
 
                         <!-- Color Column -->
-                        <ng-container matColumnDef="color">
-                            <mat-header-cell *matHeaderCellDef mat-sort-header> Color </mat-header-cell>
+                        <ng-container matColumnDef="allow_flag">
+                            <mat-header-cell *matHeaderCellDef mat-sort-header> Action </mat-header-cell>
                             <mat-cell *matCellDef="let row">
                                 <button mat-icon-button color="primary">
                                     <mat-icon>edit</mat-icon>

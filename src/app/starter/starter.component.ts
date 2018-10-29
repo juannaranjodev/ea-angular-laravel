@@ -35,6 +35,4 @@ export class StarterComponent implements AfterViewInit {
           this.ea_products = ea_products.data; 
       });
   }
-
-
 }
