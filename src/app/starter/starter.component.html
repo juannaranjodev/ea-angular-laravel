@@ -13,6 +13,12 @@
                         Starter Page
                     </div>
                 </div>
+                <ul>
+                    <li *ngFor="let ea_product of ea_products">
+                        {{ea_product.ea_id}} ({{ea_product.ea_name}} {{ea_product.user_id}})
+                        - <a (click)="deleteEaProduct(ea_product.id)" class="text-danger">Delete</a>
+                    </li>
+                </ul>
             </mat-card-content>
         </mat-card>
     </div>

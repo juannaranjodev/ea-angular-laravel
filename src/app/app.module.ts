@@ -22,7 +22,7 @@ import { AppBlankComponent } from './layouts/blank/blank.component';
 
 import { AuthGuard } from './_guards';
 import { JwtInterceptor, ErrorInterceptor } from './_helpers';
-import { AlertService, AuthenticationService, UserService } from './_services';
+import { AlertService, AuthenticationService, UserService, EaProductService } from './_services';
 
 
 
@@ -54,6 +54,7 @@ import { AlertService, AuthenticationService, UserService } from './_services';
     //ruby test below
     AuthenticationService,
     UserService,
+    EaProductService,
     AuthGuard,
     AlertService,
     { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },

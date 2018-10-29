@@ -78,6 +78,5 @@ export class LoginComponent implements OnInit {
     );
     // ruby test >
 
-
   }
 }

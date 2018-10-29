@@ -28,6 +28,10 @@ export const AppRoutes: Routes = [
       {
         path: 'icons',
         loadChildren: './icons/mat-icon.module#IconsModule'
+      },
+      {
+        path: 'table',
+        loadChildren: './table/table.module#TablesModule'
       }
     ]
   },
@@ -39,7 +43,7 @@ export const AppRoutes: Routes = [
         path: 'authentication',
         loadChildren:
           './authentication/authentication.module#AuthenticationModule'
-      }
+      },
     ]
   },
   {

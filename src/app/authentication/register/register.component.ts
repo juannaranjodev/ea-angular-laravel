@@ -51,7 +51,7 @@ export class RegisterComponent implements OnInit {
       return;
     }
 
-    console.log("ruby: login component, email = ", this.form.controls.email.value);
+    console.log("ruby: register component, email = ", this.form.controls.email.value);
     let user = {
       name: 'My Name',
       email: this.form.controls.email.value,
@@ -76,7 +76,7 @@ export class RegisterComponent implements OnInit {
             }
         },
         error => {
-            console.log('ruby : failed to login');
+            console.log('ruby : failed to register');
             // this.warningMessage = "Invalid Credentials!";
             // this.error = error;
             this.loading = false;

@@ -32,6 +32,12 @@ const MENUITEMS = [
     icon: 'content_copy'
   },
   {
+    state: 'table',
+    name: 'EA Page',
+    type: 'link',
+    icon: 'content_copy'
+  },
+  {
     state: 'material',
     name: 'Material Ui',
     type: 'sub',
