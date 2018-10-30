@@ -10,7 +10,7 @@
                         <!-- ID Column -->
                         <ng-container matColumnDef="ea_id">
                             <mat-header-cell *matHeaderCellDef mat-sort-header> EA ID </mat-header-cell>
-                            <mat-cell *matCellDef="let row" (click)="openLiscense(row.ea_id)"> {{row.ea_id}} </mat-cell>
+                            <mat-cell *matCellDef="let row"> {{row.ea_id}} </mat-cell>
                         </ng-container>
 
                         <!-- Progress Column -->
@@ -52,7 +52,9 @@
                         </mat-row>
                     </mat-table>
 
-                    <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>
+                </div>
+                <div>
+                    <button></button>
                 </div>
             </mat-card-content>
         </mat-card>

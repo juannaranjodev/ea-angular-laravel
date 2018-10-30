@@ -22,7 +22,13 @@ import { AppBlankComponent } from './layouts/blank/blank.component';
 
 import { AuthGuard } from './_guards';
 import { JwtInterceptor, ErrorInterceptor } from './_helpers';
-import { AlertService, AuthenticationService, UserService, EaProductService } from './_services';
+import {
+  AlertService,
+  AuthenticationService,
+  UserService,
+  EaProductService,
+  LicenseService,
+} from './_services';
 
 
 
@@ -57,6 +63,7 @@ import { AlertService, AuthenticationService, UserService, EaProductService } fr
     EaProductService,
     AuthGuard,
     AlertService,
+    LicenseService,
     { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
     { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
   ],

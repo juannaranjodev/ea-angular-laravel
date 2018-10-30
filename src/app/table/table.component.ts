@@ -101,7 +101,7 @@ export class TableComponent implements AfterViewInit {
             eadata.push({
               ea_id: this.ea_products[i].ea_id,
               ea_name: this.ea_products[i].ea_name,
-              email: this.ea_products[i].user_id.toString(),//this.userService.getById(this.ea_products[i].user_id).email,
+              email: this.ea_products[i].email,
               color: COLORS[Math.round(Math.random() * (COLORS.length - 1))]
             });
           }

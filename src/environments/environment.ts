@@ -7,5 +7,6 @@ export const environment = {
   production: false,
   hmr: false,
   baseUrl: window.location.origin, // Base URL here
-  apiUrl: 'http://localhost:8000/api' // server(Laravel) API URL here
+  apiUrl: 'http://localhost:8000/api', // server(Laravel) API URL here
+  backUrl: 'http://localhost:8000'
 };

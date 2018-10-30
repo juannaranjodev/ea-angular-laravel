@@ -3,8 +3,9 @@ import { MatPaginator, MatSort, MatTableDataSource } from '@angular/material';
 
 // ruby test added
 import { License } from '../../_models';
-import { EaProductService, UserService, } from '../../_services';
+import { EaProductService, UserService, LicenseService} from '../../_services';
 import { first } from 'rxjs/operators';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-license',
@@ -15,13 +16,16 @@ export class LicenseComponent implements AfterViewInit {
   displayedColumns = ['ea_id', 'email', 'account_number', 'hash_key', 'allow_flag'];
   dataSource: MatTableDataSource<LicenseData>;
   licenses: License[] = [];
+  ea_id: string;
+
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
 
   constructor( private eaproductService: EaProductService,
-    private userService: UserService
-  ){
-  }
+    private userService: UserService,
+    private licenseService: LicenseService,
+    private route: ActivatedRoute,
+  ){}
 
   /**
    * Set the paginator and sort after the view init since this component will
@@ -39,24 +43,27 @@ export class LicenseComponent implements AfterViewInit {
   }
 
   ngOnInit() {
-    this.loadAllEaProducts();
+    this.route.params.subscribe(params => { this.ea_id = params['ea_id']; });
+    console.log("ruby::::::: license ngOnInit-", this.ea_id);
+    this.loadAllLicenses(this.ea_id);
   }
 
-  deleteEaProduct(id: number) {
-      this.eaproductService.delete(id).pipe(first()).subscribe(() => { 
-          this.loadAllEaProducts() 
+  deleteLicense(id: number) {
+      this.licenseService.delete(id).pipe(first()).subscribe(() => { 
+          this.loadAllLicenses(this.ea_id);
       });
   }
 
-  private loadAllEaProducts() {
-      this.eaproductService.getAll().pipe(first()).subscribe(licenses => {
+  private loadAllLicenses(ea_id: string) {
+      this.licenseService.getByEaId(ea_id).pipe(first()).subscribe(licenses => {
+        console.log("ruby: licenses from back", licenses);
           this.licenses = licenses.data;
           // Create 100 users
-          const eadata: LicenseData[] = [];
+          const licensedata: LicenseData[] = [];
           for (let i = 0; i < this.licenses.length; i++) {
             let userdata = this.userService.getById(this.licenses[i].user_id);
             console.log("ruby:: userdata = ", userdata);
-            eadata.push({
+            licensedata.push({
               ea_id: this.licenses[i].ea_id,
               account_number: this.licenses[i].account_number,
               hash_key: this.licenses[i].hash_key,
@@ -66,7 +73,7 @@ export class LicenseComponent implements AfterViewInit {
           }
 
           // Assign the data to the data source for the table to render
-          this.dataSource = new MatTableDataSource(eadata);
+          this.dataSource = new MatTableDataSource(licensedata);
           this.dataSource.paginator = this.paginator;
           this.dataSource.sort = this.sort;
       });

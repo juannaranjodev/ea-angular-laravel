@@ -12,7 +12,7 @@ export const TablesRoutes: Routes = [
         component: TableComponent
       },
       {
-        path: 'license/:id',
+        path: 'license/:ea_id',
         component: LicenseComponent
       },
     ]
