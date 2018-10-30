@@ -1,0 +1,25 @@
+<div class="text-center">
+    <img alt="homepage" src="assets/images/logo-icon.png">
+    <h4 class="m-t-0">Edit Item</h4>
+</div>
+<div mat-dialog-content>
+    <mat-form-field class="m-t-20">
+        <mat-label>Select Email</mat-label>
+        <mat-select #fontSize [(ngModel)]="data.selectedEmail">
+            <mat-option *ngFor="let user of users;" value={{user.email}}>{{user.email}}</mat-option>
+        </mat-select>
+    </mat-form-field>
+    <mat-form-field>
+        <input matInput tabindex="1" placeholder="EA ID" [(ngModel)]="data.selectedEaId">
+    </mat-form-field>
+    <mat-form-field>
+        <input matInput tabindex="1" placeholder="EA Name" [(ngModel)]="data.selectedEaName">
+    </mat-form-field>
+    <mat-form-field>
+        <input matInput tabindex="1" placeholder="Parameter" [(ngModel)]="data.selectedParameter">
+    </mat-form-field>
+</div>
+<div mat-dialog-actions>
+    <button mat-button (click)="onSubmit()" tabindex="2">Ok</button>
+    <button mat-button (click)="onNoClick()" tabindex="-1">No Thanks</button>
+</div>

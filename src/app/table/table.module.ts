@@ -10,7 +10,10 @@ import { TablesRoutes } from './table.routing';
 import { Ng2SmartTableModule } from 'ng2-smart-table';
 
 import { TableComponent} from './table.component';
-import { DialogOverviewExampleDialogComponent} from './create-ea-product/create-ea-product.component';
+import { CreateEaProductComponent} from './create-ea-product/create-ea-product.component';
+import { EditEaProductComponent} from './edit-ea-product/edit-ea-product.component';
+import { CreateLicenseComponent} from './license/create-license/create-license.component';
+import { EditLicenseComponent} from './license/edit-license/edit-license.component';
 import { LicenseComponent } from './license/license.component';
 
 @NgModule({
@@ -23,9 +26,12 @@ import { LicenseComponent } from './license/license.component';
     ReactiveFormsModule,
     Ng2SmartTableModule
   ],
-  entryComponents: [DialogOverviewExampleDialogComponent],
+  entryComponents: [CreateEaProductComponent, EditEaProductComponent, CreateLicenseComponent, EditLicenseComponent],
   declarations: [
-    DialogOverviewExampleDialogComponent,
+    CreateEaProductComponent,
+    EditEaProductComponent,
+    CreateLicenseComponent,
+    EditLicenseComponent,
     TableComponent,
     LicenseComponent
   ]

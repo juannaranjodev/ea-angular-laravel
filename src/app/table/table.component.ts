@@ -7,26 +7,9 @@ import { Ea_Product } from '../_models';
 import { EaProductService, UserService } from '../_services';
 import { first } from 'rxjs/operators';
 import { Router} from '@angular/router';
-import { DialogOverviewExampleDialogComponent} from './create-ea-product/create-ea-product.component';
-
-/** Constants used to fill up our data base. */
-const COLORS = [
-  'maroon',
-  'red',
-  'orange',
-  'yellow',
-  'olive',
-  'green',
-  'purple',
-  'fuchsia',
-  'lime',
-  'teal',
-  'aqua',
-  'blue',
-  'navy',
-  'black',
-  'gray'
-];
+import { CreateEaProductComponent} from './create-ea-product/create-ea-product.component';
+import { EditEaProductComponent} from './edit-ea-product/edit-ea-product.component';
+import { ToastrManager } from 'ng6-toastr-notifications';
 
 @Component({
   selector: 'app-table',
@@ -34,7 +17,7 @@ const COLORS = [
   styleUrls: ['./table.component.scss']
 })
 export class TableComponent implements AfterViewInit {
-  displayedColumns = ['ea_id', 'ea_name', 'email', 'color'];
+  displayedColumns = ['ea_id', 'ea_name', 'email', 'id'];
   dataSource: MatTableDataSource<EAData>;
   ea_products: Ea_Product[] = [];
   // ruby test
@@ -48,7 +31,8 @@ export class TableComponent implements AfterViewInit {
   constructor( private eaproductService: EaProductService,
     private userService: UserService,
     private router: Router,
-    public dialog: MatDialog
+    public dialog: MatDialog,
+    public toastr: ToastrManager
   ){}
 
   /**
@@ -70,10 +54,18 @@ export class TableComponent implements AfterViewInit {
     this.loadAllEaProducts();
   }
 
-  deleteEaProduct(id: number) {
-      this.eaproductService.delete(id).pipe(first()).subscribe(() => { 
-          this.loadAllEaProducts() 
-      });
+  deleteEaProduct = (id: number) => {
+    console.log("ruby: del ea prod, id", id);
+      this.eaproductService.delete(id).pipe(first()).subscribe(
+        res => {
+          this.toastr.successToastr('Successfully Deleted.', 'Success!', {animate: "slideFromTop"});
+          this.loadAllEaProducts();
+          // check for errors
+        },
+        error => {
+            this.toastr.errorToastr('There might be some problems.', 'Error', {animate: "slideFromTop"});
+        }
+      );
   }
 
   private loadAllEaProducts() {
@@ -86,7 +78,9 @@ export class TableComponent implements AfterViewInit {
               ea_id: this.ea_products[i].ea_id,
               ea_name: this.ea_products[i].ea_name,
               email: this.ea_products[i].email,
-              color: COLORS[Math.round(Math.random() * (COLORS.length - 1))]
+              id: this.ea_products[i].id,
+              parameter: this.ea_products[i].parameter,
+              user_id: this.ea_products[i].user_id
             });
           }
 
@@ -106,19 +100,27 @@ export class TableComponent implements AfterViewInit {
 
   // ruby test
   openNewDialog(): void {
-    const dialogRef = this.dialog.open(DialogOverviewExampleDialogComponent, {
+    const dialogRef = this.dialog.open(CreateEaProductComponent, {
       width: '480px',
       data: { newEaId: this.newEaId, newEaName: this.newEaName, newParameter: this.newParameter }
     });
 
-    // dialogRef.afterClosed().subscribe(result => {
-    //   console.log('The dialog was closed');
-    //   this.newEaId = result.newEaId;
-    //   this.newEaName = result.newEaName;
-    //   this.newParameter = result.newParameter;
-    //   console.log("ruby: closed data", result);
+    dialogRef.afterClosed().subscribe(result => {
+      this.loadAllEaProducts();
+    });
+  }
 
-    // });
+
+  editEaProduct(row: any): void {
+    const dialogRef = this.dialog.open(EditEaProductComponent, {
+      width: '480px',
+      data: { selectedId: row.id, selectedEmail: row.email, selectedEaId: row.ea_id, selectedEaName: row.ea_name, selectedParameter: row.parameter
+                , selectedUserId: row.user_id}
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      this.loadAllEaProducts();
+    });
   }
 }
 
@@ -126,5 +128,7 @@ export interface EAData {
   ea_id: string;
   ea_name: string;
   email: string;
-  color: string;
+  id: number;
+  parameter: string;
+  user_id: number;
 }

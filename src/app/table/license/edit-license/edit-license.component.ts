@@ -2,17 +2,17 @@ import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { Component, ViewChild, AfterViewInit,Inject } from '@angular/core';
 import { MatPaginator, MatSort, MatTableDataSource } from '@angular/material';
 
-import { EaProductService, UserService } from '../../_services';
-import { User, Ea_Product } from '../../_models';
+import { LicenseService, UserService } from '../../../_services';
+import { User, License } from '../../../_models';
 import { first } from 'rxjs/operators';
 import { ToastrManager } from 'ng6-toastr-notifications';
 
 //ruby dialog test
 @Component({
   selector: 'app-dialog-overview-example-dialog',
-  templateUrl: './create-ea-product.component.html'
+  templateUrl: './edit-license.component.html'
 })
-export class CreateEaProductComponent {
+export class EditLicenseComponent {
   users: User[] = [];
   newEaId: string;
   newEaName: string;
@@ -20,34 +20,37 @@ export class CreateEaProductComponent {
   newUserId: number;
   email: number;
   constructor(
-    public dialogRef: MatDialogRef<CreateEaProductComponent>,
-    // @Inject(MAT_DIALOG_DATA) public data: any,
+    public dialogRef: MatDialogRef<EditLicenseComponent>,
+    @Inject(MAT_DIALOG_DATA) public data: any,
     private userService: UserService,
-    private eaProductService: EaProductService,
+    private licenseService: LicenseService,
     public toastr: ToastrManager
   ) {}
 
   ngOnInit() {
-    console.log("ruby test");
+    console.log("ruby test", this.data);
     this.loadUsers();
   }
 
   onSubmit(): void {
     console.log("ruby: submit", this.email)
-    let newEaProduct = new Ea_Product();
+    let license = new License();
     //   ea_id: this.newEaId,
     //   ea_name: this.newEaName,
     //   parameter: this.newParameter,
     //   user_id: this.email,
     // });
-    newEaProduct.ea_id = this.newEaId;
-    newEaProduct.ea_name = this.newEaName;
-    newEaProduct.parameter = this.newParameter;
-    newEaProduct.user_id = this.email;
-    this.eaProductService.add(newEaProduct)
+    license.id = this.data.selectedId;
+    license.ea_id = this.data.selectedEaId;
+    license.account_number = this.data.selectedAccountNumber;
+    license.hash_key = this.data.selectedHashKey;
+    license.allow_flag = this.data.selectedAllowFlag;
+    license.user_id = this.users.find(user => user.email == this.data.selectedEmail).id;
+    console.log(license);
+    this.licenseService.update(license)
     .subscribe(
       res => {
-        this.toastr.successToastr('Successfully Added.', 'Success!', {animate: "slideFromTop"});
+        this.toastr.successToastr('Successfully Updated.', 'Success!', {animate: "slideFromTop"});
         console.log("ruby: test save eaproduct,", res);
         this.dialogRef.close();
         // check for errors

@@ -2,28 +2,29 @@ import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { Component, ViewChild, AfterViewInit,Inject } from '@angular/core';
 import { MatPaginator, MatSort, MatTableDataSource } from '@angular/material';
 
-import { EaProductService, UserService } from '../../_services';
-import { User, Ea_Product } from '../../_models';
+import { LicenseService, UserService } from '../../../_services';
+import { User, License } from '../../../_models';
 import { first } from 'rxjs/operators';
 import { ToastrManager } from 'ng6-toastr-notifications';
 
 //ruby dialog test
 @Component({
   selector: 'app-dialog-overview-example-dialog',
-  templateUrl: './create-ea-product.component.html'
+  templateUrl: './create-license.component.html'
 })
-export class CreateEaProductComponent {
+export class CreateLicenseComponent {
   users: User[] = [];
   newEaId: string;
-  newEaName: string;
-  newParameter: string;
+  newAccountNumber: string;
+  newHashKey: string;
   newUserId: number;
+  newAllowFlag: boolean;
   email: number;
   constructor(
-    public dialogRef: MatDialogRef<CreateEaProductComponent>,
-    // @Inject(MAT_DIALOG_DATA) public data: any,
+    public dialogRef: MatDialogRef<CreateLicenseComponent>,
+    @Inject(MAT_DIALOG_DATA) public data: any,
     private userService: UserService,
-    private eaProductService: EaProductService,
+    private licenseService: LicenseService,
     public toastr: ToastrManager
   ) {}
 
@@ -34,17 +35,19 @@ export class CreateEaProductComponent {
 
   onSubmit(): void {
     console.log("ruby: submit", this.email)
-    let newEaProduct = new Ea_Product();
+    let license = new License();
     //   ea_id: this.newEaId,
     //   ea_name: this.newEaName,
     //   parameter: this.newParameter,
     //   user_id: this.email,
     // });
-    newEaProduct.ea_id = this.newEaId;
-    newEaProduct.ea_name = this.newEaName;
-    newEaProduct.parameter = this.newParameter;
-    newEaProduct.user_id = this.email;
-    this.eaProductService.add(newEaProduct)
+    license.ea_id = this.data.ea_id;
+    license.account_number = this.newAccountNumber;
+    license.hash_key = this.newHashKey;
+    license.user_id = this.email;
+    license.allow_flag = this.newAllowFlag;
+    console.log(license);
+    this.licenseService.add(license)
     .subscribe(
       res => {
         this.toastr.successToastr('Successfully Added.', 'Success!', {animate: "slideFromTop"});

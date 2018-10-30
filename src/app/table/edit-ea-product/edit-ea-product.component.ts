@@ -10,9 +10,9 @@ import { ToastrManager } from 'ng6-toastr-notifications';
 //ruby dialog test
 @Component({
   selector: 'app-dialog-overview-example-dialog',
-  templateUrl: './create-ea-product.component.html'
+  templateUrl: './edit-ea-product.component.html'
 })
-export class CreateEaProductComponent {
+export class EditEaProductComponent {
   users: User[] = [];
   newEaId: string;
   newEaName: string;
@@ -20,34 +20,36 @@ export class CreateEaProductComponent {
   newUserId: number;
   email: number;
   constructor(
-    public dialogRef: MatDialogRef<CreateEaProductComponent>,
-    // @Inject(MAT_DIALOG_DATA) public data: any,
+    public dialogRef: MatDialogRef<EditEaProductComponent>,
+    @Inject(MAT_DIALOG_DATA) public data: any,
     private userService: UserService,
     private eaProductService: EaProductService,
     public toastr: ToastrManager
   ) {}
 
   ngOnInit() {
-    console.log("ruby test");
+    console.log("ruby test", this.data);
     this.loadUsers();
   }
 
   onSubmit(): void {
     console.log("ruby: submit", this.email)
-    let newEaProduct = new Ea_Product();
+    let editEaProduct = new Ea_Product();
     //   ea_id: this.newEaId,
     //   ea_name: this.newEaName,
     //   parameter: this.newParameter,
     //   user_id: this.email,
     // });
-    newEaProduct.ea_id = this.newEaId;
-    newEaProduct.ea_name = this.newEaName;
-    newEaProduct.parameter = this.newParameter;
-    newEaProduct.user_id = this.email;
-    this.eaProductService.add(newEaProduct)
+    editEaProduct.id = this.data.selectedId;
+    editEaProduct.ea_id = this.data.selectedEaId;
+    editEaProduct.ea_name = this.data.selectedEaName;
+    editEaProduct.parameter = this.data.selectedParameter;
+    editEaProduct.user_id = this.users.find(user => user.email == this.data.selectedEmail).id;
+    console.log(editEaProduct);
+    this.eaProductService.update(editEaProduct)
     .subscribe(
       res => {
-        this.toastr.successToastr('Successfully Added.', 'Success!', {animate: "slideFromTop"});
+        this.toastr.successToastr('Successfully Updated.', 'Success!', {animate: "slideFromTop"});
         console.log("ruby: test save eaproduct,", res);
         this.dialogRef.close();
         // check for errors

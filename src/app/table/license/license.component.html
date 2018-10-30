@@ -2,47 +2,43 @@
     <div fxFlex.gt-sm="100" fxFlex.gt-xs="100" fxFlex="100">
         <mat-card>
             <mat-card-content>
-                <mat-card-title>License Data</mat-card-title>
- 
+                <!-- <mat-card-title>License Data</mat-card-title> -->
+                <div fxLayout="row" fxLayoutWrap="wrap">
+                        <!-- col full-->
+                        <div fxFlex.gt-sm="50" fxFlex.gt-xs="50" fxFlex="50">
+                            <mat-card-title>License Data</mat-card-title>
+                        </div>
+                        <div fxFlex.gt-sm="50" fxFlex.gt-xs="50" fxFlex="50"  class="text-right">
+                            <button mat-mini-fab color="primary" (click)="createNewLicense()">
+                                <mat-icon>add</mat-icon>
+                            </button>
+                        </div>
+                    </div>
                 <div class="table-rasponsive">
                     <mat-table [dataSource]="dataSource" matSort>
 
-                        <!-- ID Column -->
-                        <ng-container matColumnDef="ea_id">
-                            <mat-header-cell *matHeaderCellDef mat-sort-header> EA ID </mat-header-cell>
-                            <mat-cell *matCellDef="let row"> {{row.ea_id}} </mat-cell>
-                        </ng-container>
 
-                        <!-- Progress Column -->
-                        <ng-container matColumnDef="email">
-                            <mat-header-cell *matHeaderCellDef mat-sort-header> Email </mat-header-cell>
-                            <mat-cell *matCellDef="let row"> {{row.email}} </mat-cell>
-                        </ng-container>
-
-                        <!-- Name Column -->
+                        <!-- Account Number Column -->
                         <ng-container matColumnDef="account_number">
                             <mat-header-cell *matHeaderCellDef mat-sort-header> Account Number </mat-header-cell>
                             <mat-cell *matCellDef="let row"> {{row.account_number}} </mat-cell>
                         </ng-container>
 
-                        <!-- Hash Key Column -->
-                        <ng-container matColumnDef="hash_key">
-                            <mat-header-cell *matHeaderCellDef mat-sort-header> Hash Key </mat-header-cell>
-                            <mat-cell *matCellDef="let row"> {{row.hash_key}} </mat-cell>
+                        <!-- Allow Flag Column -->
+                        <ng-container matColumnDef="allow_flag">
+                            <mat-header-cell *matHeaderCellDef mat-sort-header> Allow Flag </mat-header-cell>
+                            <mat-cell *matCellDef="let row"> {{row.allow_flag}} </mat-cell>
                         </ng-container>
 
-                        <!-- Color Column -->
-                        <ng-container matColumnDef="allow_flag">
+                        <!-- Action Column -->
+                        <ng-container matColumnDef="action">
                             <mat-header-cell *matHeaderCellDef mat-sort-header> Action </mat-header-cell>
                             <mat-cell *matCellDef="let row">
-                                <button mat-icon-button color="primary">
+                                <button mat-icon-button color="primary" (click)="editLicense(row)">
                                     <mat-icon>edit</mat-icon>
                                 </button>
-                                <button mat-icon-button>
+                                <button mat-icon-button (click)="deleteLicense(row.id)">
                                     <mat-icon>delete</mat-icon>
-                                </button>
-                                <button mat-icon-button color="warn" (click)="openLiscense(row.ea_id)">
-                                    <mat-icon>list</mat-icon>
                                 </button>
                             </mat-cell>
                         </ng-container>
@@ -51,10 +47,6 @@
                         <mat-row *matRowDef="let row; columns: displayedColumns;">
                         </mat-row>
                     </mat-table>
-
-                </div>
-                <div>
-                    <button></button>
                 </div>
             </mat-card-content>
         </mat-card>

@@ -1,0 +1,38 @@
+<div class="text-center">
+    <img alt="homepage" src="assets/images/logo-icon.png">
+    <h4 class="m-t-0">Create New License</h4>
+</div>
+<div mat-card-content>
+    <div fxLayout="row" fxLayoutWrap="wrap">
+        <div fxFlex.gt-sm="100" fxFlex.gt-xs="100" fxFlex="100">
+            <mat-form-field class="m-t-20">
+                <mat-label>Select Email</mat-label>
+                <mat-select #fontSize [(ngModel)]="email">
+                    <mat-option *ngFor="let user of users;" value={{user.id}}>{{user.email}}</mat-option>
+                </mat-select>
+            </mat-form-field>
+        </div>
+        
+        <!-- <mat-form-field>
+            <input matInput tabindex="1" placeholder="EA ID" [(ngModel)]="newEaId">
+        </mat-form-field> -->
+        <div fxFlex.gt-sm="100" fxFlex.gt-xs="100" fxFlex="100">
+            <mat-form-field>
+                <input matInput tabindex="1" placeholder="Account Number" [(ngModel)]="newAccountNumber">
+            </mat-form-field>
+        </div>
+        <div fxFlex.gt-sm="100" fxFlex.gt-xs="100" fxFlex="100">
+            <mat-form-field>
+                <input matInput tabindex="1" placeholder="Hashkey" [(ngModel)]="newHashKey">
+            </mat-form-field>   
+        </div>
+        <div fxFlex.gt-sm="100" fxFlex.gt-xs="100" fxFlex="100">
+            <mat-checkbox matInput color="primary" [(ngModel)]="newAllowFlag">Allow Flag</mat-checkbox>
+        </div>
+    </div>
+    
+</div>
+<div mat-dialog-actions class="text-right">
+    <button mat-raised-button color="primary" (click)="onSubmit()" tabindex="2">Ok</button>
+    <button mat-button (click)="onNoClick()" tabindex="-1">No Thanks</button>
+</div>

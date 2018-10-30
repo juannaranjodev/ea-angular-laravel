@@ -6,6 +6,11 @@ import { License } from '../../_models';
 import { EaProductService, UserService, LicenseService} from '../../_services';
 import { first } from 'rxjs/operators';
 import { ActivatedRoute } from '@angular/router';
+import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
+import { ToastrManager } from 'ng6-toastr-notifications';
+
+import { CreateLicenseComponent} from './create-license/create-license.component';
+import { EditLicenseComponent} from './edit-license/edit-license.component';
 
 @Component({
   selector: 'app-license',
@@ -13,7 +18,7 @@ import { ActivatedRoute } from '@angular/router';
   styleUrls: ['./license.component.scss']
 })
 export class LicenseComponent implements AfterViewInit {
-  displayedColumns = ['ea_id', 'email', 'account_number', 'hash_key', 'allow_flag'];
+  displayedColumns = ['account_number', 'allow_flag', 'action'];
   dataSource: MatTableDataSource<LicenseData>;
   licenses: License[] = [];
   ea_id: string;
@@ -25,6 +30,8 @@ export class LicenseComponent implements AfterViewInit {
     private userService: UserService,
     private licenseService: LicenseService,
     private route: ActivatedRoute,
+    public dialog: MatDialog,
+    public toastr: ToastrManager
   ){}
 
   /**
@@ -49,9 +56,16 @@ export class LicenseComponent implements AfterViewInit {
   }
 
   deleteLicense(id: number) {
-      this.licenseService.delete(id).pipe(first()).subscribe(() => { 
+      this.licenseService.delete(id).pipe(first()).subscribe(
+        res => {
+          this.toastr.successToastr('Successfully Deleted.', 'Success!', {animate: "slideFromTop"});
           this.loadAllLicenses(this.ea_id);
-      });
+          // check for errors
+        },
+        error => {
+            this.toastr.errorToastr('There might be some problems.', 'Error', {animate: "slideFromTop"});
+        }
+      );
   }
 
   private loadAllLicenses(ea_id: string) {
@@ -61,14 +75,14 @@ export class LicenseComponent implements AfterViewInit {
           // Create 100 users
           const licensedata: LicenseData[] = [];
           for (let i = 0; i < this.licenses.length; i++) {
-            let userdata = this.userService.getById(this.licenses[i].user_id);
-            console.log("ruby:: userdata = ", userdata);
             licensedata.push({
               ea_id: this.licenses[i].ea_id,
               account_number: this.licenses[i].account_number,
               hash_key: this.licenses[i].hash_key,
-              email: this.licenses[i].user_id.toString(),//this.userService.getById(this.ea_products[i].user_id).email,
-              allow_flag: this.licenses[i].allow_flag
+              email: this.licenses[i].email,
+              allow_flag: this.licenses[i].allow_flag,
+              user_id: this.licenses[i].user_id,
+              id: this.licenses[i].id
             });
           }
 
@@ -82,6 +96,32 @@ export class LicenseComponent implements AfterViewInit {
   openLiscense(ea_id: string) {
     console.log("ruby clicked here: ", ea_id);
   }
+
+  // ruby test
+  createNewLicense(): void {
+    const dialogRef = this.dialog.open(CreateLicenseComponent, {
+      width: '480px',
+      data: { ea_id: this.ea_id}
+      // data: { newEaId: this.newEaId, newEaName: this.newEaName, newParameter: this.newParameter }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      this.loadAllLicenses(this.ea_id);
+    });
+  }
+
+  editLicense(row: any): void {
+    const dialogRef = this.dialog.open(EditLicenseComponent, {
+      width: '480px',
+      height: 'auto',
+      data: { selectedId: row.id, selectedEmail: row.email, selectedEaId: row.ea_id, selectedAccountNumber: row.account_number, selectedHashKey: row.hash_key
+                , selectedAllowFlag: row.allow_flag}
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      this.loadAllLicenses(this.ea_id);
+    });
+  }
 }
 
 
@@ -91,4 +131,6 @@ export interface LicenseData {
   account_number: string;
   hash_key: string;
   allow_flag: boolean;
+  user_id: number;
+  id: number;
 }
