@@ -28,8 +28,8 @@ import {
   UserService,
   EaProductService,
   LicenseService,
-} from './_services';
-
+} from './_services'; 
+import { ToastrModule } from 'ng6-toastr-notifications';
 
 
 
@@ -54,6 +54,7 @@ import {
     HttpClientModule,
     SharedModule,
     RouterModule.forRoot(AppRoutes),
+    ToastrModule.forRoot()
     //ruby test below
   ],
   providers: [

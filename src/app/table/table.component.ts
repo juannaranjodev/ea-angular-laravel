@@ -1,11 +1,13 @@
-import { Component, ViewChild, AfterViewInit } from '@angular/core';
+import { Component, ViewChild, AfterViewInit,Inject } from '@angular/core';
 import { MatPaginator, MatSort, MatTableDataSource } from '@angular/material';
+import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 
 // ruby test added
 import { Ea_Product } from '../_models';
 import { EaProductService, UserService } from '../_services';
 import { first } from 'rxjs/operators';
 import { Router} from '@angular/router';
+import { DialogOverviewExampleDialogComponent} from './create-ea-product/create-ea-product.component';
 
 /** Constants used to fill up our data base. */
 const COLORS = [
@@ -26,28 +28,6 @@ const COLORS = [
   'gray'
 ];
 
-const NAMES = [
-  'Maia',
-  'Asher',
-  'Olivia',
-  'Atticus',
-  'Amelia',
-  'Jack',
-  'Charlotte',
-  'Theodore',
-  'Isla',
-  'Oliver',
-  'Isabella',
-  'Jasper',
-  'Cora',
-  'Levi',
-  'Violet',
-  'Arthur',
-  'Mia',
-  'Thomas',
-  'Elizabeth'
-];
-
 @Component({
   selector: 'app-table',
   templateUrl: './table.component.html',
@@ -57,12 +37,18 @@ export class TableComponent implements AfterViewInit {
   displayedColumns = ['ea_id', 'ea_name', 'email', 'color'];
   dataSource: MatTableDataSource<EAData>;
   ea_products: Ea_Product[] = [];
+  // ruby test
+  newEaId: string;
+  newEaName: string;
+  newParameter: string;
+
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
 
   constructor( private eaproductService: EaProductService,
     private userService: UserService,
-    private router: Router
+    private router: Router,
+    public dialog: MatDialog
   ){}
 
   /**
@@ -93,11 +79,9 @@ export class TableComponent implements AfterViewInit {
   private loadAllEaProducts() {
       this.eaproductService.getAll().pipe(first()).subscribe(ea_products => {
           this.ea_products = ea_products.data;
-          // Create 100 users
+          
           const eadata: EAData[] = [];
           for (let i = 0; i < this.ea_products.length; i++) {
-            let userdata = this.userService.getById(this.ea_products[i].user_id);
-            console.log("ruby:: userdata = ", userdata);
             eadata.push({
               ea_id: this.ea_products[i].ea_id,
               ea_name: this.ea_products[i].ea_name,
@@ -119,8 +103,24 @@ export class TableComponent implements AfterViewInit {
       this.router.navigate(['/table/license', ea_id]);
     }
   }
-}
 
+  // ruby test
+  openNewDialog(): void {
+    const dialogRef = this.dialog.open(DialogOverviewExampleDialogComponent, {
+      width: '480px',
+      data: { newEaId: this.newEaId, newEaName: this.newEaName, newParameter: this.newParameter }
+    });
+
+    // dialogRef.afterClosed().subscribe(result => {
+    //   console.log('The dialog was closed');
+    //   this.newEaId = result.newEaId;
+    //   this.newEaName = result.newEaName;
+    //   this.newParameter = result.newParameter;
+    //   console.log("ruby: closed data", result);
+
+    // });
+  }
+}
 
 export interface EAData {
   ea_id: string;

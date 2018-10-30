@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 
 import { Ea_Product } from '../_models';
 import { environment } from '../../environments/environment'; // ruby test
+import { map } from 'rxjs/operators';
 @Injectable()
 export class EaProductService {
     constructor(private http: HttpClient) { }
@@ -16,7 +17,12 @@ export class EaProductService {
     }
 
     add(ea_product: Ea_Product) {
-        return this.http.post(`${environment.apiUrl}/ea_products/`, ea_product);
+        return this.http.post(`${environment.apiUrl}/ea_products/`, ea_product)
+        .pipe(map(res => {
+            // add ea product successful
+            console.log("ruby: ea product save res = ", res);
+            return res;
+        }));
     }
 
     update(ea_product: Ea_Product) {
