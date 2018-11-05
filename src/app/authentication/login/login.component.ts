@@ -10,6 +10,7 @@ import {
 import { AlertService, AuthenticationService } from '../../_services';
 import { first } from "rxjs/operators";
 import { CustomValidators } from 'ng2-validation';
+import { ToastrManager } from 'ng6-toastr-notifications';
 
 @Component({
   selector: 'app-login',
@@ -30,7 +31,9 @@ export class LoginComponent implements OnInit {
       // ruby test added
       private authenticationService: AuthenticationService,
       private route: ActivatedRoute,
-      private alertService: AlertService) {}
+      private alertService: AlertService,
+      public toastr: ToastrManager
+      ) {}
 
   ngOnInit() {
     this.form = this.fb.group({
@@ -47,10 +50,9 @@ export class LoginComponent implements OnInit {
 
   onSubmit() {
     // ruby test <
-    if(this.form.invalid){
+    if(this.form.invalid || this.loading){
       return;
     }
-
     this.loading = true;
     console.log("ruby: login component, email = ", this.form.controls.email.value);
     this.authenticationService.login(this.form.controls.email.value, this.form.controls.password.value)
@@ -58,12 +60,18 @@ export class LoginComponent implements OnInit {
     .subscribe(
         res => {
             console.log("ruby: test subscribe,", res);
+            this.loading = false;
             // check for errors
             this.warningMessage = '';
             // if not errors - navigate to home
             console.log("ruby: res.success", res.success);
             if (res.token) {
-              this.router.navigate(['/starter']);
+              this.toastr.successToastr('Successfully logged in.', 'Success!', {animate: "slideFromTop"});
+              this.router.navigate(['/table']);
+            } else {
+              if(res.message) {
+                this.toastr.errorToastr(res.message, 'Error', {animate: "slideFromTop"});
+              }
             }
             
 
@@ -73,7 +81,7 @@ export class LoginComponent implements OnInit {
             // this.warningMessage = "Invalid Credentials!";
             // this.error = error;
             this.loading = false;
-            console.error(error);
+            this.toastr.errorToastr('Invalid credentials!', 'Error', {animate: "slideFromTop"});
         }
     );
     // ruby test >

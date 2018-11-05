@@ -6,7 +6,7 @@ import { LicenseService, UserService } from '../../../_services';
 import { User, License } from '../../../_models';
 import { first } from 'rxjs/operators';
 import { ToastrManager } from 'ng6-toastr-notifications';
-
+import { Common } from '../../../common';
 //ruby dialog test
 @Component({
   selector: 'app-dialog-overview-example-dialog',
@@ -19,6 +19,9 @@ export class EditLicenseComponent {
   newParameter: string;
   newUserId: number;
   email: number;
+  isAdmin: boolean;
+  loading: boolean;
+
   constructor(
     public dialogRef: MatDialogRef<EditLicenseComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any,
@@ -29,23 +32,25 @@ export class EditLicenseComponent {
 
   ngOnInit() {
     console.log("ruby test", this.data);
+    this.isAdmin = Common.isAdmin();
     this.loadUsers();
+    this.loading = false;
   }
 
   onSubmit(): void {
+    if(this.loading) {
+      return;
+    }
+    this.loading = true;
     console.log("ruby: submit", this.email)
     let license = new License();
-    //   ea_id: this.newEaId,
-    //   ea_name: this.newEaName,
-    //   parameter: this.newParameter,
-    //   user_id: this.email,
-    // });
+
     license.id = this.data.selectedId;
     license.ea_id = this.data.selectedEaId;
     license.account_number = this.data.selectedAccountNumber;
-    license.hash_key = this.data.selectedHashKey;
+    //license.hash_key = this.data.selectedHashKey;
     license.allow_flag = this.data.selectedAllowFlag;
-    license.user_id = this.users.find(user => user.email == this.data.selectedEmail).id;
+    license.user_id = this.data.selectedUserId;//this.users.find(user => user.email == this.data.selectedEmail).id;
     console.log(license);
     this.licenseService.update(license)
     .subscribe(
@@ -53,6 +58,7 @@ export class EditLicenseComponent {
         this.toastr.successToastr('Successfully Updated.', 'Success!', {animate: "slideFromTop"});
         console.log("ruby: test save eaproduct,", res);
         this.dialogRef.close();
+        this.loading = false;
         // check for errors
       },
       error => {

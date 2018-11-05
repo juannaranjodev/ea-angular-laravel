@@ -5,12 +5,14 @@ import { MatPaginator, MatSort, MatTableDataSource } from '@angular/material';
 import { License } from '../../_models';
 import { EaProductService, UserService, LicenseService} from '../../_services';
 import { first } from 'rxjs/operators';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { ToastrManager } from 'ng6-toastr-notifications';
 
 import { CreateLicenseComponent} from './create-license/create-license.component';
 import { EditLicenseComponent} from './edit-license/edit-license.component';
+import { Common } from '../../common';
+import { ConfirmComponent} from '../confirm.component';
 
 @Component({
   selector: 'app-license',
@@ -22,6 +24,8 @@ export class LicenseComponent implements AfterViewInit {
   dataSource: MatTableDataSource<LicenseData>;
   licenses: License[] = [];
   ea_id: string;
+  user_id: string;
+  isAdmin: boolean;
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
@@ -31,7 +35,8 @@ export class LicenseComponent implements AfterViewInit {
     private licenseService: LicenseService,
     private route: ActivatedRoute,
     public dialog: MatDialog,
-    public toastr: ToastrManager
+    public toastr: ToastrManager,
+    private router: Router,
   ){}
 
   /**
@@ -50,22 +55,41 @@ export class LicenseComponent implements AfterViewInit {
   }
 
   ngOnInit() {
-    this.route.params.subscribe(params => { this.ea_id = params['ea_id']; });
-    console.log("ruby::::::: license ngOnInit-", this.ea_id);
+    this.route.params.subscribe(params => { this.ea_id = params['ea_id'],  this.user_id = params['user_id'] });
+    console.log("ruby::::::: license ngOnInit-", this.ea_id, ", user_id ",this.user_id);
+    this.isAdmin = Common.isAdmin();
+    if(!this.isAdmin && Common.getUser().id.toString() != this.user_id){
+      this.toastr.errorToastr('The account list is not accessable.', 'Error', {animate: "slideFromTop"});
+      this.router.navigate(['/table']);
+    }
     this.loadAllLicenses(this.ea_id);
+    
   }
 
-  deleteLicense(id: number) {
-      this.licenseService.delete(id).pipe(first()).subscribe(
-        res => {
-          this.toastr.successToastr('Successfully Deleted.', 'Success!', {animate: "slideFromTop"});
-          this.loadAllLicenses(this.ea_id);
-          // check for errors
-        },
-        error => {
-            this.toastr.errorToastr('There might be some problems.', 'Error', {animate: "slideFromTop"});
-        }
-      );
+  deleteLicense(id: number, allow_flag: boolean) {
+    if(!this.isAdmin && !allow_flag) {
+      this.toastr.errorToastr('This account is not editable.', 'Error', {animate: "slideFromTop"});
+      return;
+    }
+
+    const dialogRef = this.dialog.open(ConfirmComponent, {
+      width: '250px',
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if(result === true){
+        this.licenseService.delete(id).pipe(first()).subscribe(
+          res => {
+            this.toastr.successToastr('Successfully Deleted.', 'Success!', {animate: "slideFromTop"});
+            this.loadAllLicenses(this.ea_id);
+            // check for errors
+          },
+          error => {
+              this.toastr.errorToastr('There might be some problems.', 'Error', {animate: "slideFromTop"});
+          }
+        );
+      }
+    });
   }
 
   private loadAllLicenses(ea_id: string) {
@@ -78,7 +102,7 @@ export class LicenseComponent implements AfterViewInit {
             licensedata.push({
               ea_id: this.licenses[i].ea_id,
               account_number: this.licenses[i].account_number,
-              hash_key: this.licenses[i].hash_key,
+              //hash_key: this.licenses[i].hash_key,
               email: this.licenses[i].email,
               allow_flag: this.licenses[i].allow_flag,
               user_id: this.licenses[i].user_id,
@@ -99,9 +123,13 @@ export class LicenseComponent implements AfterViewInit {
 
   // ruby test
   createNewLicense(): void {
+    if(!this.isAdmin && this.licenses.length >= 3) {
+      this.toastr.errorToastr("You can't add an account any more.", 'Error', {animate: "slideFromTop"});
+      return;
+    }
     const dialogRef = this.dialog.open(CreateLicenseComponent, {
       width: '480px',
-      data: { ea_id: this.ea_id}
+      data: { ea_id: this.ea_id, user_id: this.user_id, licenses: this.licenses }
       // data: { newEaId: this.newEaId, newEaName: this.newEaName, newParameter: this.newParameter }
     });
 
@@ -111,11 +139,15 @@ export class LicenseComponent implements AfterViewInit {
   }
 
   editLicense(row: any): void {
+    if(!this.isAdmin && !row.allow_flag) {
+      this.toastr.errorToastr('This account is not editable.', 'Error', {animate: "slideFromTop"});
+      return;
+    }
     const dialogRef = this.dialog.open(EditLicenseComponent, {
       width: '480px',
       height: 'auto',
-      data: { selectedId: row.id, selectedEmail: row.email, selectedEaId: row.ea_id, selectedAccountNumber: row.account_number, selectedHashKey: row.hash_key
-                , selectedAllowFlag: row.allow_flag}
+      data: { selectedId: row.id,  selectedEaId: row.ea_id, selectedAccountNumber: row.account_number 
+                , selectedAllowFlag: row.allow_flag, selectedUserId: row.user_id}
     });
 
     dialogRef.afterClosed().subscribe(result => {
@@ -129,7 +161,7 @@ export interface LicenseData {
   ea_id: string;
   email: string;
   account_number: string;
-  hash_key: string;
+  //hash_key: string;
   allow_flag: boolean;
   user_id: number;
   id: number;

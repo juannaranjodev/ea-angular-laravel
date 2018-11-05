@@ -5,20 +5,25 @@
                 <div fxLayout="row" fxLayoutWrap="wrap">
                     <!-- col full-->
                     <div fxFlex.gt-sm="50" fxFlex.gt-xs="50" fxFlex="50">
-                        <mat-card-title>EA Data Table</mat-card-title>
+                        <mat-card-title>EA List</mat-card-title>
                     </div>
-                    <div fxFlex.gt-sm="50" fxFlex.gt-xs="50" fxFlex="50"  class="text-right">
+                    <div fxFlex.gt-sm="50" fxFlex.gt-xs="50" fxFlex="50"  class="text-right"
+                        *ngIf="isAdmin">
                         <button mat-mini-fab color="primary" (click)="openNewDialog()">
                             <mat-icon>add</mat-icon>
                             </button>
                     </div>
                 </div>
-                <!-- <div class="bg-light p-10 p-r-20 p-l-20">
-                    <mat-form-field>
-                        <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Filter">
-                    </mat-form-field>
-                </div> -->
-                
+
+                <div fxLayout="row" fxLayoutWrap="wrap">
+                    <div fxFlex.gt-sm="50" fxFlex.gt-xs="50" fxFlex="50">
+                        <div class="bg-light p-10 p-r-20 p-l-20" style="background-color: white!important;">
+                            <mat-form-field>
+                                <input matInput [(ngModel)]="initSearchValue" (keyup)="applyFilter($event.target.value)" placeholder="Filter">
+                            </mat-form-field>
+                        </div>
+                    </div>
+                </div>
 
                 <div class="table-rasponsive">
                     <mat-table [dataSource]="dataSource" matSort>
@@ -26,7 +31,7 @@
                         <!-- ID Column -->
                         <ng-container matColumnDef="ea_id">
                             <mat-header-cell *matHeaderCellDef mat-sort-header> EA ID </mat-header-cell>
-                            <mat-cell *matCellDef="let row" (click)="openLiscense(row.ea_id)"> {{row.ea_id}} </mat-cell>
+                            <mat-cell *matCellDef="let row"> {{row.ea_id}} </mat-cell>
                         </ng-container>
 
                         <!-- Progress Column -->
@@ -45,13 +50,16 @@
                         <ng-container matColumnDef="id">
                             <mat-header-cell *matHeaderCellDef mat-sort-header> Action </mat-header-cell>
                             <mat-cell *matCellDef="let row">
-                                <button mat-icon-button color="primary" (click)="editEaProduct(row)">
+                                
+                                <button mat-icon-button color="primary" (click)="editEaProduct(row)"
+                                    *ngIf="isAdmin">
                                     <mat-icon>edit</mat-icon>
                                 </button>
-                                <button mat-icon-button (click)="deleteEaProduct(row.id)">
+                                <button mat-icon-button (click)="deleteEaProduct(row.id)"
+                                    *ngIf="isAdmin">
                                     <mat-icon>delete</mat-icon>
                                 </button>
-                                <button mat-icon-button color="warn" (click)="openLiscense(row.ea_id)">
+                                <button mat-icon-button color="warn" (click)="openLiscense(row.ea_id,row.user_id)">
                                     <mat-icon>list</mat-icon>
                                 </button>
                             </mat-cell>

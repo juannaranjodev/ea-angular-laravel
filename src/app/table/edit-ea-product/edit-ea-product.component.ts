@@ -19,6 +19,7 @@ export class EditEaProductComponent {
   newParameter: string;
   newUserId: number;
   email: number;
+  loading: boolean;
   constructor(
     public dialogRef: MatDialogRef<EditEaProductComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any,
@@ -30,33 +31,39 @@ export class EditEaProductComponent {
   ngOnInit() {
     console.log("ruby test", this.data);
     this.loadUsers();
+    this.loading = false;
   }
 
   onSubmit(): void {
+    if(this.loading){
+      return;
+    }
+    this.loading = true;
     console.log("ruby: submit", this.email)
     let editEaProduct = new Ea_Product();
-    //   ea_id: this.newEaId,
-    //   ea_name: this.newEaName,
-    //   parameter: this.newParameter,
-    //   user_id: this.email,
-    // });
+    editEaProduct.user_id = this.getUserId(this.data.selectedEmail);
+    if(editEaProduct.user_id < 0) {
+      this.toastr.errorToastr('Invalid email!', 'Error!', {animate: "slideFromTop"});
+      this.loading = false;
+      return;
+    }
     editEaProduct.id = this.data.selectedId;
-    editEaProduct.ea_id = this.data.selectedEaId;
+    editEaProduct.ea_id = this.data.selectedEaId.split(' ').join('');
     editEaProduct.ea_name = this.data.selectedEaName;
     editEaProduct.parameter = this.data.selectedParameter;
-    editEaProduct.user_id = this.users.find(user => user.email == this.data.selectedEmail).id;
-    console.log(editEaProduct);
+    
+    //console.log(editEaProduct);
     this.eaProductService.update(editEaProduct)
     .subscribe(
       res => {
         this.toastr.successToastr('Successfully Updated.', 'Success!', {animate: "slideFromTop"});
         console.log("ruby: test save eaproduct,", res);
         this.dialogRef.close();
-        // check for errors
+        this.loading = false;
       },
       error => {
           console.log('ruby : failed to save ea product');
-          this.toastr.errorToastr('There might be some problems.', 'Error', {animate: "slideFromTop"});
+          this.toastr.errorToastr('Failed in updating data', 'Error', {animate: "slideFromTop"});
       });
   }
 
@@ -69,6 +76,14 @@ export class EditEaProductComponent {
       this.users = users.data;
       console.log("ruby: create ea, users", this.users);
     });
+  }
+
+  getUserId(email: string) {
+    let user = this.users.find(user => user.email == email);
+    if(user) {
+      return user.id;
+    }
+    return -1;
   }
 
 }

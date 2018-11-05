@@ -11,6 +11,7 @@ import {
 import { CustomValidators } from 'ng2-validation';
 import { AlertService, AuthenticationService } from '../../_services';
 import { first } from "rxjs/operators";
+import { ToastrManager } from 'ng6-toastr-notifications';
 
 const password = new FormControl('', Validators.required);
 const confirmPassword = new FormControl('', CustomValidators.equalTo(password));
@@ -34,7 +35,9 @@ export class ResetPasswordComponent implements OnInit {
     // ruby test added
     private authenticationService: AuthenticationService,
     private route: ActivatedRoute,
-    private alertService: AlertService) {}
+    private alertService: AlertService,
+    public toastr: ToastrManager
+    ) {}
 
   ngOnInit() {
     this.form = this.fb.group({
@@ -66,6 +69,9 @@ export class ResetPasswordComponent implements OnInit {
             this.warningMessage = '';
             if (res.success) {
               this.router.navigate(['/authentication/login']);
+              this.toastr.successToastr('Password has been reset!', 'Success!', {animate: "slideFromTop"});
+            }else {
+              this.toastr.errorToastr('Password reset failed!', 'Error', {animate: "slideFromTop"});
             }
         },
         error => {
@@ -73,7 +79,7 @@ export class ResetPasswordComponent implements OnInit {
             // this.warningMessage = "Invalid Credentials!";
             // this.error = error;
             this.loading = false;
-            console.error(error);
+            this.toastr.errorToastr('Password reset failed!', 'Error', {animate: "slideFromTop"});
         }
     );
     // ruby test >

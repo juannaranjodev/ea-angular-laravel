@@ -6,14 +6,14 @@
                 <div fxLayout="row" fxLayoutWrap="wrap">
                         <!-- col full-->
                         <div fxFlex.gt-sm="50" fxFlex.gt-xs="50" fxFlex="50">
-                            <mat-card-title>License Data</mat-card-title>
+                            <mat-card-title>Account List</mat-card-title>
                         </div>
                         <div fxFlex.gt-sm="50" fxFlex.gt-xs="50" fxFlex="50"  class="text-right">
                             <button mat-mini-fab color="primary" (click)="createNewLicense()">
                                 <mat-icon>add</mat-icon>
                             </button>
                         </div>
-                    </div>
+                </div>
                 <div class="table-rasponsive">
                     <mat-table [dataSource]="dataSource" matSort>
 
@@ -26,8 +26,11 @@
 
                         <!-- Allow Flag Column -->
                         <ng-container matColumnDef="allow_flag">
-                            <mat-header-cell *matHeaderCellDef mat-sort-header> Allow Flag </mat-header-cell>
-                            <mat-cell *matCellDef="let row"> {{row.allow_flag}} </mat-cell>
+                            <mat-header-cell *matHeaderCellDef mat-sort-header> Status </mat-header-cell>
+                            <mat-cell *matCellDef="let row">
+                                <mat-icon *ngIf="row.allow_flag" color="primary">check_circle_outline</mat-icon>
+                                <mat-icon *ngIf="!row.allow_flag" color="warn">highlight_off</mat-icon>
+                            </mat-cell>
                         </ng-container>
 
                         <!-- Action Column -->
@@ -37,7 +40,7 @@
                                 <button mat-icon-button color="primary" (click)="editLicense(row)">
                                     <mat-icon>edit</mat-icon>
                                 </button>
-                                <button mat-icon-button (click)="deleteLicense(row.id)">
+                                <button mat-icon-button (click)="deleteLicense(row.id, row.allow_flag)">
                                     <mat-icon>delete</mat-icon>
                                 </button>
                             </mat-cell>

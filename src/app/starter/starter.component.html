@@ -6,19 +6,82 @@
     <div fxFlex.gt-sm="100" fxFlex.gt-xs="100" fxFlex="100">
         <mat-card>
             <mat-card-content>
-                <!-- Row -->
-                <div fxLayout="row" fxLayoutWrap="wrap">
-                    <!-- column -->
-                    <div fxFlex.gt-sm="50" fxFlex.gt-xs="50">
-                        Starter Page
-                    </div>
-                </div>
-                <ul>
-                    <li *ngFor="let ea_product of ea_products">
-                        {{ea_product.ea_id}} ({{ea_product.ea_name}} {{ea_product.user_id}})
-                        - <a (click)="deleteEaProduct(ea_product.id)" class="text-danger">Delete</a>
-                    </li>
-                </ul>
+              <!-- Row -->
+              <div fxLayout="row" fxLayoutWrap="wrap">
+                  <!-- column -->
+                  <div fxFlex.gt-sm="50" fxFlex.gt-xs="50">
+                      Users Page
+                  </div>
+              </div>
+              <!-- <ul>
+                  <li *ngFor="let user of users">
+                      {{user.id}} : {{user.email}}
+                      - <a (click)="deleteEaProduct(user.id)" class="text-danger">Delete</a>
+                  </li>
+              </ul> -->
+
+              <div class="table-rasponsive">
+                <mat-table [dataSource]="dataSource" matSort>
+
+                    <!-- ID Column -->
+                    <ng-container matColumnDef="id">
+                        <mat-header-cell *matHeaderCellDef mat-sort-header> User ID </mat-header-cell>
+                        <mat-cell *matCellDef="let row"> {{row.id}} </mat-cell>
+                    </ng-container>
+
+                    <!-- Progress Column -->
+                    <ng-container matColumnDef="email">
+                        <mat-header-cell *matHeaderCellDef mat-sort-header> Email </mat-header-cell>
+                        <mat-cell *matCellDef="let row"> {{row.email}} </mat-cell>
+                    </ng-container>
+
+                    <!-- Name Column -->
+                    <ng-container matColumnDef="is_allowed">
+                      <mat-header-cell *matHeaderCellDef mat-sort-header> Allowed </mat-header-cell>
+                      <mat-cell *matCellDef="let row">
+                        <button mat-icon-button *ngIf="row.is_allowed">
+                          <mat-icon
+                            color="primary"
+                            (click)="setAllowStatus(row)">
+                            check_circle_outline
+                          </mat-icon>
+                        </button>
+                        <button mat-icon-button *ngIf="!row.is_allowed">
+                          <mat-icon
+                            color="warn"
+                            (click)="setAllowStatus(row)">
+                            highlight_off
+                          </mat-icon>
+                        </button>
+                      </mat-cell>
+                    </ng-container>
+
+                    <!-- Color Column -->
+                    <ng-container matColumnDef="action">
+                        <mat-header-cell *matHeaderCellDef mat-sort-header> Action </mat-header-cell>
+                        <mat-cell *matCellDef="let row">
+                            
+                            <!-- <button mat-icon-button color="primary" (click)="editEaProduct(row)"
+                                *ngIf="isAdmin">
+                                <mat-icon>edit</mat-icon>
+                            </button> -->
+                            <button mat-icon-button (click)="deleteUser(row.id)"
+                                *ngIf="isAdmin">
+                                <mat-icon>delete</mat-icon>
+                            </button>
+                            <button mat-icon-button color="warn" (click)="openLiscense(row)">
+                                <mat-icon>list</mat-icon>
+                            </button>
+                        </mat-cell>
+                    </ng-container>
+                    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+                    <mat-row *matRowDef="let row; columns: displayedColumns;">
+                    </mat-row>
+                </mat-table>
+
+                <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>
+              </div>
+
             </mat-card-content>
         </mat-card>
     </div>

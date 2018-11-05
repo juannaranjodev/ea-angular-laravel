@@ -10,7 +10,7 @@ import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
     <input matInput tabindex="1" [(ngModel)]="data.animal">
   </mat-form-field>
 </div>
-<div mat-dialog-actions>
+<div class="text-right">
   <button mat-button [mat-dialog-close]="data.animal" tabindex="2">Ok</button>
   <button mat-button (click)="onNoClick()" tabindex="-1">No Thanks</button>
 </div>`

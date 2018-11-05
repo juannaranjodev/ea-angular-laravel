@@ -7,6 +7,8 @@ export const environment = {
   production: false,
   hmr: false,
   baseUrl: window.location.origin, // Base URL here
+  // apiUrl: 'http://license.swarmtradingforex.com/api', // server(Laravel) API URL here
+  // backUrl: 'http://license.swarmtradingforex.com/'
   apiUrl: 'http://localhost:8000/api', // server(Laravel) API URL here
-  backUrl: 'http://localhost:8000'
+  backUrl: 'http://localhost:8000/'
 };

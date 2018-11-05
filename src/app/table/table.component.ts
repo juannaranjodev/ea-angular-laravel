@@ -1,4 +1,4 @@
-import { Component, ViewChild, AfterViewInit,Inject } from '@angular/core';
+import { Component, ViewChild, AfterViewInit,Inject, ViewContainerRef } from '@angular/core';
 import { MatPaginator, MatSort, MatTableDataSource } from '@angular/material';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 
@@ -6,10 +6,13 @@ import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { Ea_Product } from '../_models';
 import { EaProductService, UserService } from '../_services';
 import { first } from 'rxjs/operators';
-import { Router} from '@angular/router';
+import { Router, ActivatedRoute} from '@angular/router';
 import { CreateEaProductComponent} from './create-ea-product/create-ea-product.component';
 import { EditEaProductComponent} from './edit-ea-product/edit-ea-product.component';
 import { ToastrManager } from 'ng6-toastr-notifications';
+import { Common } from '../common';
+import { ConfirmComponent} from './confirm.component';
+
 
 @Component({
   selector: 'app-table',
@@ -24,15 +27,18 @@ export class TableComponent implements AfterViewInit {
   newEaId: string;
   newEaName: string;
   newParameter: string;
-
+  isAdmin: boolean;
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
+  initSearchValue: string;
+
 
   constructor( private eaproductService: EaProductService,
     private userService: UserService,
     private router: Router,
     public dialog: MatDialog,
-    public toastr: ToastrManager
+    public toastr: ToastrManager,
+    private route: ActivatedRoute,
   ){}
 
   /**
@@ -45,31 +51,47 @@ export class TableComponent implements AfterViewInit {
   }
 
   applyFilter(filterValue: string) {
+    if(!filterValue)
+      return;
+    console.log("ruby filter: ", filterValue);
     filterValue = filterValue.trim(); // Remove whitespace
     filterValue = filterValue.toLowerCase(); // Datasource defaults to lowercase matches
     this.dataSource.filter = filterValue;
+
   }
 
   ngOnInit() {
+    this.isAdmin = Common.isAdmin();
+    this.route.params.subscribe(params => { this.initSearchValue = params['email'] });
+    console.log("ruby: param email =", this.initSearchValue);
+    //this.initSearchValue = "";
     this.loadAllEaProducts();
+    
   }
 
   deleteEaProduct = (id: number) => {
-    console.log("ruby: del ea prod, id", id);
-      this.eaproductService.delete(id).pipe(first()).subscribe(
-        res => {
-          this.toastr.successToastr('Successfully Deleted.', 'Success!', {animate: "slideFromTop"});
-          this.loadAllEaProducts();
-          // check for errors
-        },
-        error => {
-            this.toastr.errorToastr('There might be some problems.', 'Error', {animate: "slideFromTop"});
-        }
-      );
+    const dialogRef = this.dialog.open(ConfirmComponent, {
+      width: '250px',
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      // if(result === true){
+      //   this.eaproductService.delete(id).pipe(first()).subscribe(
+      //     res => {
+      //       this.toastr.successToastr('Successfully Deleted.', 'Success!', {animate: "slideFromTop"});
+      //       this.loadAllEaProducts();
+      //       // check for errors
+      //     },
+      //     error => {
+      //         this.toastr.errorToastr('There might be some problems.', 'Error', {animate: "slideFromTop"});
+      //     }
+      //   );
+      // }
+    });
   }
 
-  private loadAllEaProducts() {
-      this.eaproductService.getAll().pipe(first()).subscribe(ea_products => {
+  loadAllEaProducts() {
+      this.eaproductService.getUserEaProducts().pipe(first()).subscribe(ea_products => {
           this.ea_products = ea_products.data;
           
           const eadata: EAData[] = [];
@@ -88,18 +110,24 @@ export class TableComponent implements AfterViewInit {
           this.dataSource = new MatTableDataSource(eadata);
           this.dataSource.paginator = this.paginator;
           this.dataSource.sort = this.sort;
+          if(this.initSearchValue && this.initSearchValue != "") {
+            this.applyFilter(this.initSearchValue);
+          }
+          
+          return true;
       });
   }
 
-  openLiscense(ea_id: string) {
+  openLiscense(ea_id: string, user_id: number) {
     console.log("ruby clicked here: ", ea_id);
     if(ea_id) {
-      this.router.navigate(['/table/license', ea_id]);
+      this.router.navigate(['/table/license', ea_id, user_id]);
     }
   }
 
   // ruby test
   openNewDialog(): void {
+
     const dialogRef = this.dialog.open(CreateEaProductComponent, {
       width: '480px',
       data: { newEaId: this.newEaId, newEaName: this.newEaName, newParameter: this.newParameter }

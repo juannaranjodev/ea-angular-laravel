@@ -11,6 +11,7 @@ import {
 import { CustomValidators } from 'ng2-validation';
 import { AlertService, UserService } from '../../_services';
 import { first } from "rxjs/operators";
+import { ToastrManager } from 'ng6-toastr-notifications';
 
 const password = new FormControl('', Validators.required);
 const confirmPassword = new FormControl('', CustomValidators.equalTo(password));
@@ -23,6 +24,7 @@ const confirmPassword = new FormControl('', CustomValidators.equalTo(password));
 export class RegisterComponent implements OnInit {
   public form: FormGroup;
   loading: false;
+  password: "";
   private warningMessage: string;
 
 
@@ -32,7 +34,9 @@ export class RegisterComponent implements OnInit {
     // ruby test added
     private userService: UserService,
     private route: ActivatedRoute,
-    private alertService: AlertService) {}
+    private alertService: AlertService,
+    public toastr: ToastrManager
+    ) {}
 
   ngOnInit() {
     this.form = this.fb.group({
@@ -73,10 +77,13 @@ export class RegisterComponent implements OnInit {
             // console.log("ruby: res.success", res.success);
             if (res.token) {
               this.router.navigate(['/authentication/login']);
+              this.toastr.successToastr('Successfully Registered. Please wait until allowed.', 'Success!', {animate: "slideFromTop"});
+            }else {
+              this.toastr.errorToastr('Failed in register. Try again.', 'Error', {animate: "slideFromTop"});
             }
         },
         error => {
-            console.log('ruby : failed to register');
+            this.toastr.errorToastr('Failed in register. Try again.', 'Error', {animate: "slideFromTop"});
             // this.warningMessage = "Invalid Credentials!";
             // this.error = error;
             this.loading = false;

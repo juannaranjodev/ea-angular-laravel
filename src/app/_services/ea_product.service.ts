@@ -11,7 +11,13 @@ export class EaProductService {
     getAll() {
         return this.http.get<any>(`${environment.apiUrl}/ea_products`);
     }
-
+    getUserEaProducts() {
+        let user = JSON.parse(localStorage.getItem('currentUser'));
+        if(user.role != 'admin') {
+            return this.http.get<any>(`${environment.backUrl}/ea_products/myea_products/` + user.id)
+        }
+        return this.getAll();
+    }
     getById(id: number) {
         return this.http.get(`${environment.apiUrl}/ea_products/` + id);
     }

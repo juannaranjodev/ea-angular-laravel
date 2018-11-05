@@ -9,6 +9,7 @@ import {
 import { CustomValidators } from 'ng2-validation';
 import { first } from "rxjs/operators";
 import { AlertService, AuthenticationService } from '../../_services';
+import { ToastrManager } from 'ng6-toastr-notifications';
 
 @Component({
   selector: 'app-forgot',
@@ -27,7 +28,9 @@ export class ForgotComponent implements OnInit {
     private router: Router,
     private authenticationService: AuthenticationService,
     private route: ActivatedRoute,
-    private alertService: AlertService) {}
+    private alertService: AlertService,
+    public toastr: ToastrManager
+    ) {}
 
   ngOnInit() {
     this.form = this.fb.group({
@@ -57,6 +60,9 @@ export class ForgotComponent implements OnInit {
             console.log("ruby: res.success", res.success);
             if (res.success) {
               this.router.navigate(['/authentication/login']);
+              this.toastr.successToastr('Email has been sent!', 'Success!', {animate: "slideFromTop"});
+            }else {
+              this.toastr.errorToastr('Sending reset email failed!', 'Error', {animate: "slideFromTop"});
             }
             
 
@@ -66,7 +72,7 @@ export class ForgotComponent implements OnInit {
             // this.warningMessage = "Invalid Credentials!";
             // this.error = error;
             this.loading = false;
-            console.error(error);
+            this.toastr.errorToastr('Sending reset email failed!', 'Error', {animate: "slideFromTop"});
         }
     );
 

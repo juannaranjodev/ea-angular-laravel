@@ -5,14 +5,16 @@ import { DemoMaterialModule } from '../demo-material-module';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { StarterComponent } from './starter.component';
 import { StarterRoutes } from './starter.routing';
+import { ConfirmComponent} from './confirm.component';
 
 @NgModule({
   imports: [
     CommonModule,
     DemoMaterialModule,
     FlexLayoutModule,
-    RouterModule.forChild(StarterRoutes)
+    RouterModule.forChild(StarterRoutes),
   ],
-  declarations: [StarterComponent]
+  declarations: [StarterComponent, ConfirmComponent],
+  entryComponents: [ConfirmComponent],
 })
 export class StarterModule {}

@@ -21,7 +21,7 @@ export class LicenseService {
     }
 
     add(license: License) {
-        return this.http.post(`${environment.apiUrl}/licenses/`, license);
+        return this.http.post<any>(`${environment.apiUrl}/licenses/`, license);
     }
 
     update(license: License) {
@@ -30,5 +30,9 @@ export class LicenseService {
 
     delete(id: number) {
         return this.http.delete(`${environment.apiUrl}/licenses/` + id);
+    }
+
+    deleteWithUser(id: number) {
+        return this.http.delete(`${environment.apiUrl}/licenses/delbyuser` + id);
     }
 }

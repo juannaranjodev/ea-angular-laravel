@@ -11,7 +11,6 @@ export class AuthenticationService {
     constructor(private http: HttpClient) { }
 
     login(email: string, password: string) {
-        console.log("ruby: auth service / login=", email , password);
         return this.http.post<any>(
             this.apiUrl + '/login',
                 { email: email, password: password })
@@ -19,7 +18,6 @@ export class AuthenticationService {
                     // login successful if there's a jwt token in the response
                     if (user && user.token) {
                         // store user details and jwt token in local storage to keep user logged in between page refreshes
-                        console.log("ruby: authenticaation / login, user = ", user);
                         localStorage.setItem('currentUser', JSON.stringify(user));
                     }
                     return user;
@@ -33,7 +31,6 @@ export class AuthenticationService {
 
     // ruby test added : send email link
     forgotPassword(email: string) {
-        console.log("ruby: auth service : forgotPassword");
         let url = this.baseUrl + '/authentication/resetpassword';
 
         return this.http.post<any>(

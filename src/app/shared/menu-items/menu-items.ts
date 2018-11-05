@@ -26,14 +26,14 @@ export interface Menu {
 
 const MENUITEMS = [
   {
-    state: 'starter',
-    name: 'Starter Page',
+    state: 'table',
+    name: 'Expert Advisor',
     type: 'link',
     icon: 'content_copy'
   },
   {
-    state: 'table',
-    name: 'EA Page',
+    state: 'starter',
+    name: 'Users Page',
     type: 'link',
     icon: 'content_copy'
   },

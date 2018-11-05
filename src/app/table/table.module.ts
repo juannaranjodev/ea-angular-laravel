@@ -15,6 +15,7 @@ import { EditEaProductComponent} from './edit-ea-product/edit-ea-product.compone
 import { CreateLicenseComponent} from './license/create-license/create-license.component';
 import { EditLicenseComponent} from './license/edit-license/edit-license.component';
 import { LicenseComponent } from './license/license.component';
+import { ConfirmComponent } from './confirm.component';
 
 @NgModule({
   imports: [
@@ -24,16 +25,18 @@ import { LicenseComponent } from './license/license.component';
     FlexLayoutModule,
     FormsModule,
     ReactiveFormsModule,
-    Ng2SmartTableModule
+    Ng2SmartTableModule,
+
   ],
-  entryComponents: [CreateEaProductComponent, EditEaProductComponent, CreateLicenseComponent, EditLicenseComponent],
+  entryComponents: [CreateEaProductComponent, EditEaProductComponent, CreateLicenseComponent, EditLicenseComponent, ConfirmComponent],
   declarations: [
     CreateEaProductComponent,
     EditEaProductComponent,
     CreateLicenseComponent,
     EditLicenseComponent,
     TableComponent,
-    LicenseComponent
+    LicenseComponent,
+    ConfirmComponent
   ]
 })
 export class TablesModule {}
