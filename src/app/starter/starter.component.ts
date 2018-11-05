@@ -11,6 +11,7 @@ import { ToastrManager } from 'ng6-toastr-notifications';
 import { ConfirmComponent} from './confirm.component';
 import { Router} from '@angular/router';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
+import { CreateUserComponent } from './create-user/create-user.component';
 
 @Component({
   selector: 'app-starter',
@@ -23,6 +24,7 @@ export class StarterComponent implements AfterViewInit {
   users: User[] = [];
   isAdmin: boolean;
   loading: boolean;
+
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
 
@@ -72,19 +74,20 @@ export class StarterComponent implements AfterViewInit {
     });
   }
 
+  createUser () {
+    console.log("ruby: create user");
+    const dialogRef = this.dialog.open(CreateUserComponent, {
+      width: '480px',
+      //data: { newEaId: this.newEaId, newEaName: this.newEaName, newParameter: this.newParameter }
+    });
 
-  deleteUser2(id: number) {
-    if(id == Common.getUser().id) {
-      this.toastr.errorToastr('Failed to delete user!', 'Error', {animate: "slideFromTop"});
-      return;
-    }
-    this.userService.delete(id).pipe(first()).subscribe(() => { 
-        this.loadAllUsers() 
+    dialogRef.afterClosed().subscribe(result => {
+      this.loadAllUsers();
     });
   }
-
-  openLiscense(row) {
-    console.log("ruby: openLicense", row);
+ 
+  openEaPage(row) {
+    console.log("ruby: openEaPage", row);
     this.router.navigate(['/table/detail', row.email]);
   }
 
@@ -112,6 +115,15 @@ export class StarterComponent implements AfterViewInit {
         this.toastr.errorToastr('Failed to change status!', 'Error', {animate: "slideFromTop"});
       }
     );
+  }
+
+  applyFilter(filterValue: string) {
+
+    console.log("ruby filter: ", filterValue);
+    filterValue = filterValue.trim(); // Remove whitespace
+    filterValue = filterValue.toLowerCase(); // Datasource defaults to lowercase matches
+    this.dataSource.filter = filterValue;
+
   }
 
   private loadAllUsers() {

@@ -57,13 +57,13 @@ export class RegisterComponent implements OnInit {
 
     console.log("ruby: register component, email = ", this.form.controls.email.value);
     let user = {
-      name: 'My Name',
+      name: 'UserName',
       email: this.form.controls.email.value,
       password: this.form.controls.password.value,
     };
 
     this.userService.register(
-      'My Name',
+      'UserName',
       this.form.controls.email.value,
       this.form.controls.password.value,
     )

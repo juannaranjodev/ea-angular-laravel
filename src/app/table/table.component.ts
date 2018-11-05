@@ -28,6 +28,7 @@ export class TableComponent implements AfterViewInit {
   newEaName: string;
   newParameter: string;
   isAdmin: boolean;
+  isFirst: boolean;
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
   initSearchValue: string;
@@ -62,6 +63,7 @@ export class TableComponent implements AfterViewInit {
 
   ngOnInit() {
     this.isAdmin = Common.isAdmin();
+    this.isFirst = true;
     this.route.params.subscribe(params => { this.initSearchValue = params['email'] });
     console.log("ruby: param email =", this.initSearchValue);
     //this.initSearchValue = "";
@@ -110,8 +112,9 @@ export class TableComponent implements AfterViewInit {
           this.dataSource = new MatTableDataSource(eadata);
           this.dataSource.paginator = this.paginator;
           this.dataSource.sort = this.sort;
-          if(this.initSearchValue && this.initSearchValue != "") {
+          if(this.initSearchValue && this.isFirst) {
             this.applyFilter(this.initSearchValue);
+            this.isFirst = false;
           }
           
           return true;

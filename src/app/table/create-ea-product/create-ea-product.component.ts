@@ -23,7 +23,7 @@ export class CreateEaProductComponent {
   loading: boolean;
   constructor(
     public dialogRef: MatDialogRef<CreateEaProductComponent>,
-    // @Inject(MAT_DIALOG_DATA) public data: any,
+    @Inject(MAT_DIALOG_DATA) public data: any,
     private userService: UserService,
     private eaProductService: EaProductService,
     public toastr: ToastrManager

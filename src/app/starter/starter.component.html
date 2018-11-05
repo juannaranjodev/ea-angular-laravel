@@ -6,19 +6,30 @@
     <div fxFlex.gt-sm="100" fxFlex.gt-xs="100" fxFlex="100">
         <mat-card>
             <mat-card-content>
-              <!-- Row -->
-              <div fxLayout="row" fxLayoutWrap="wrap">
-                  <!-- column -->
-                  <div fxFlex.gt-sm="50" fxFlex.gt-xs="50">
-                      Users Page
-                  </div>
-              </div>
               <!-- <ul>
                   <li *ngFor="let user of users">
                       {{user.id}} : {{user.email}}
                       - <a (click)="deleteEaProduct(user.id)" class="text-danger">Delete</a>
                   </li>
               </ul> -->
+              <div fxLayout="row" fxLayoutWrap="wrap">
+                  <!-- col full-->
+                  <div fxFlex.gt-sm="50" fxFlex.gt-xs="50" fxFlex="50">
+                      <mat-card-title>Users</mat-card-title>
+                  </div>
+                  <div fxFlex.gt-sm="40" fxFlex.gt-xs="40" fxFlex="40">
+                      <div class="bg-light p-r-20 p-l-20" style="background-color: white!important;">
+                          <mat-form-field>
+                              <input matInput [(ngModel)]="initSearchValue" (keyup)="applyFilter($event.target.value)" placeholder="Filter">
+                          </mat-form-field>
+                      </div>
+                  </div>
+                  <div fxFlex.gt-sm="10" fxFlex.gt-xs="10" fxFlex="10"  class="text-right">
+                      <button mat-mini-fab color="primary" (click)="createUser()">
+                          <mat-icon>add</mat-icon>
+                      </button>
+                  </div>
+              </div>
 
               <div class="table-rasponsive">
                 <mat-table [dataSource]="dataSource" matSort>
@@ -69,7 +80,7 @@
                                 *ngIf="isAdmin">
                                 <mat-icon>delete</mat-icon>
                             </button>
-                            <button mat-icon-button color="warn" (click)="openLiscense(row)">
+                            <button mat-icon-button color="warn" (click)="openEaPage(row)">
                                 <mat-icon>list</mat-icon>
                             </button>
                         </mat-cell>
