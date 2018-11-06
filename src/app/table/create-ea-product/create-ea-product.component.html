@@ -1,6 +1,7 @@
 <div class="text-center">
     <img alt="homepage" src="assets/images/logo-icon.png">
-    <h4 class="m-t-0">Add New EA</h4>
+    <h4 class="m-t-0" *ngIf="newEaId==''">Add New EA</h4>
+    <h4 class="m-t-0" *ngIf="newEaId!=''">Add User</h4>
 </div>
 <div mat-card-content>
     <mat-form-field class="m-t-20" *ngIf="currentUser.role == 'admin'" >
@@ -10,13 +11,13 @@
         </mat-select> -->
         <input matInput tabindex="1" placeholder="Email" [(ngModel)]="email" required>
     </mat-form-field>
-    <mat-form-field>
+    <mat-form-field *ngIf="newEaId==''">
         <input matInput tabindex="1" placeholder="EA ID" [(ngModel)]="newEaId" required>
     </mat-form-field>
-    <mat-form-field>
+    <mat-form-field *ngIf="newEaName==''">
         <input matInput tabindex="1" placeholder="EA Name" [(ngModel)]="newEaName" required>
     </mat-form-field>
-    <mat-form-field>
+    <mat-form-field *ngIf="newParameter==''">
         <input matInput tabindex="1" placeholder="Parameter" [(ngModel)]="newParameter" required>
     </mat-form-field>
 </div>

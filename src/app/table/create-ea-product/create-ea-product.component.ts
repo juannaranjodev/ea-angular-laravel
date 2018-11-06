@@ -31,7 +31,10 @@ export class CreateEaProductComponent {
 
   ngOnInit() {
     this.currentUser = Common.getUser();
-    console.log("ruby test: create table, cur user", this.currentUser);
+    console.log("ruby test: create table, cur user", this.data);
+    this.newEaId = this.data.newEaId || "";
+    this.newEaName = this.data.newEaName || "";
+    this.newParameter = this.data.newParameter || "";
     this.loadUsers();
     this.loading = false;
   }

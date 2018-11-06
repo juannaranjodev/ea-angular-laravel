@@ -20,7 +20,7 @@
                   <div fxFlex.gt-sm="40" fxFlex.gt-xs="40" fxFlex="40">
                       <div class="bg-light p-r-20 p-l-20" style="background-color: white!important;">
                           <mat-form-field>
-                              <input matInput [(ngModel)]="initSearchValue" (keyup)="applyFilter($event.target.value)" placeholder="Filter">
+                              <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Filter">
                           </mat-form-field>
                       </div>
                   </div>

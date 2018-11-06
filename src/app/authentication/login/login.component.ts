@@ -11,7 +11,7 @@ import { AlertService, AuthenticationService } from '../../_services';
 import { first } from "rxjs/operators";
 import { CustomValidators } from 'ng2-validation';
 import { ToastrManager } from 'ng6-toastr-notifications';
-
+import { Common } from '../../common';
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
@@ -67,7 +67,11 @@ export class LoginComponent implements OnInit {
             console.log("ruby: res.success", res.success);
             if (res.token) {
               this.toastr.successToastr('Successfully logged in.', 'Success!', {animate: "slideFromTop"});
-              this.router.navigate(['/table']);
+              if(Common.isAdmin()){
+                this.router.navigate(['/starter']);
+              }else {
+                this.router.navigate(['/table']);
+              }
             } else {
               if(res.message) {
                 this.toastr.errorToastr(res.message, 'Error', {animate: "slideFromTop"});

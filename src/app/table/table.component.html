@@ -49,7 +49,7 @@
                         <!-- Color Column -->
                         <ng-container matColumnDef="id">
                             <mat-header-cell *matHeaderCellDef mat-sort-header> Action </mat-header-cell>
-                            <mat-cell *matCellDef="let row">
+                            <mat-cell *matCellDef="let row" style="width:200px !important;">
                                 
                                 <button mat-icon-button color="primary" (click)="editEaProduct(row)"
                                     *ngIf="isAdmin">
@@ -61,6 +61,11 @@
                                 </button>
                                 <button mat-icon-button color="warn" (click)="openLiscense(row.ea_id,row.user_id)">
                                     <mat-icon>list</mat-icon>
+                                </button>
+                                <button mat-icon-button color="primary"
+                                    *ngIf="isAdmin"
+                                    (click)="openNewDialog(row.ea_id, row.ea_name, row.parameter)">
+                                    <mat-icon>add</mat-icon>
                                 </button>
                             </mat-cell>
                         </ng-container>

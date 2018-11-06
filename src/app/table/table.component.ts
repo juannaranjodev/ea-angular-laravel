@@ -52,8 +52,8 @@ export class TableComponent implements AfterViewInit {
   }
 
   applyFilter(filterValue: string) {
-    if(!filterValue)
-      return;
+    // if(!filterValue)
+    //   return;
     console.log("ruby filter: ", filterValue);
     filterValue = filterValue.trim(); // Remove whitespace
     filterValue = filterValue.toLowerCase(); // Datasource defaults to lowercase matches
@@ -129,11 +129,11 @@ export class TableComponent implements AfterViewInit {
   }
 
   // ruby test
-  openNewDialog(): void {
+  openNewDialog(ea_id = "", ea_name="", parameter = ""): void {
 
     const dialogRef = this.dialog.open(CreateEaProductComponent, {
       width: '480px',
-      data: { newEaId: this.newEaId, newEaName: this.newEaName, newParameter: this.newParameter }
+      data: { newEaId: ea_id, newEaName: ea_name, newParameter: parameter, }
     });
 
     dialogRef.afterClosed().subscribe(result => {

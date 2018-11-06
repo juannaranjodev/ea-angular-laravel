@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-
+import { Common } from '../../common';
 export interface BadgeItem {
   type: string;
   value: string;
@@ -24,16 +24,25 @@ export interface Menu {
   children?: ChildrenItems[];
 }
 
-const MENUITEMS = [
+const USERMENUITEMS = [
   {
     state: 'table',
     name: 'Expert Advisor',
     type: 'link',
     icon: 'content_copy'
-  },
+  }
+];
+
+const ADMINMENUITEMS = [
   {
     state: 'starter',
     name: 'Users Page',
+    type: 'link',
+    icon: 'account_circle'
+  },
+  {
+    state: 'table',
+    name: 'Expert Advisor',
     type: 'link',
     icon: 'content_copy'
   },
@@ -69,6 +78,9 @@ const MENUITEMS = [
 @Injectable()
 export class MenuItems {
   getMenuitem(): Menu[] {
-    return MENUITEMS;
+    if(Common.isAdmin()) {
+      return ADMINMENUITEMS;
+    }
+    return USERMENUITEMS;
   }
 }
