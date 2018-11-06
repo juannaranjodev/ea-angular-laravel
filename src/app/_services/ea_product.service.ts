@@ -23,7 +23,7 @@ export class EaProductService {
     }
 
     add(ea_product: Ea_Product) {
-        return this.http.post(`${environment.apiUrl}/ea_products/`, ea_product)
+        return this.http.post<any>(`${environment.apiUrl}/ea_products/`, ea_product)
         .pipe(map(res => {
             // add ea product successful
             console.log("ruby: ea product save res = ", res);

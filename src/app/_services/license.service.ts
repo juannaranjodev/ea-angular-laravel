@@ -16,8 +16,8 @@ export class LicenseService {
         return this.http.get(`${environment.apiUrl}/licenses/` + id);
     }
 
-    getByEaId(ea_id: string) {
-        return this.http.get<any>(`${environment.backUrl}/licenses/getbyeaid/` + ea_id);
+    getByEaId(ea_id: string, user_id: number) {
+        return this.http.get<any>(`${environment.backUrl}/licenses/getbyeaid/` + ea_id + '/' + user_id);
     }
 
     add(license: License) {

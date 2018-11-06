@@ -2,11 +2,19 @@ import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { Component, ViewChild, AfterViewInit,Inject } from '@angular/core';
 import { MatPaginator, MatSort, MatTableDataSource } from '@angular/material';
 
+import {
+  FormBuilder,
+  FormGroup,
+  Validators,
+  FormControl
+} from '@angular/forms';
 import { EaProductService, UserService } from '../../_services';
 import { User, Ea_Product } from '../../_models';
 import { first } from 'rxjs/operators';
 import { ToastrManager } from 'ng6-toastr-notifications';
 import { Common } from '../../common';
+import { CustomValidators } from 'ng2-validation';
+
 //ruby dialog test
 @Component({
   selector: 'app-create-user-dialog',
@@ -17,15 +25,22 @@ export class CreateUserComponent {
   newPassword: string;
   newIsAllowed: boolean;
   loading: boolean;
+  public form: FormGroup;
   constructor(
     public dialogRef: MatDialogRef<CreateUserComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any,
     private userService: UserService,
     private eaProductService: EaProductService,
-    public toastr: ToastrManager
+    public toastr: ToastrManager,
+    private fb: FormBuilder,
+    
   ) {}
 
   ngOnInit() {
+    this.form = this.fb.group({
+      email: [null, Validators.compose([Validators.required, CustomValidators.email])],
+      password: [null, Validators.compose([Validators.required])]
+    });
     this.loading = false;
   }
 
@@ -34,17 +49,11 @@ export class CreateUserComponent {
       return;
     this.loading = true;
     let newUser = new User();
-    
-    // if(!checkUnique(this.newEmail)) {
-    //   this.toastr.errorToastr('Invalid email!', 'Error!', {animate: "slideFromTop"});
-    //   this.loading = false;
-    //   return;
-    // }
 
     this.userService.register(
       'UserName',
-      this.newEmail,
-      this.newPassword
+      this.form.controls.email.value,
+      this.form.controls.password.value,
     )
     .pipe(first())
     .subscribe(

@@ -77,18 +77,18 @@ export class TableComponent implements AfterViewInit {
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      // if(result === true){
-      //   this.eaproductService.delete(id).pipe(first()).subscribe(
-      //     res => {
-      //       this.toastr.successToastr('Successfully Deleted.', 'Success!', {animate: "slideFromTop"});
-      //       this.loadAllEaProducts();
-      //       // check for errors
-      //     },
-      //     error => {
-      //         this.toastr.errorToastr('There might be some problems.', 'Error', {animate: "slideFromTop"});
-      //     }
-      //   );
-      // }
+      if(result === true){
+        this.eaproductService.delete(id).pipe(first()).subscribe(
+          res => {
+            this.toastr.successToastr('Successfully Deleted.', 'Success!', {animate: "slideFromTop"});
+            this.loadAllEaProducts();
+            // check for errors
+          },
+          error => {
+              this.toastr.errorToastr('There might be some problems.', 'Error', {animate: "slideFromTop"});
+          }
+        );
+      }
     });
   }
 

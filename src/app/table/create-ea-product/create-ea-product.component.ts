@@ -60,7 +60,11 @@ export class CreateEaProductComponent {
     this.eaProductService.add(newEaProduct)
     .subscribe(
       res => {
-        this.toastr.successToastr('Successfully Added.', 'Success!', {animate: "slideFromTop"});
+        if(res.success == undefined) {
+          this.toastr.successToastr('Successfully Added.', 'Success!', {animate: "slideFromTop"});
+        } else if(!res.success) {
+          this.toastr.errorToastr(res.message, 'Error', {animate: "slideFromTop"});
+        }
         console.log("ruby: test save eaproduct,", res);
         this.dialogRef.close();
         this.loading = false;

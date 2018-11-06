@@ -7,7 +7,7 @@ import { StarterComponent } from './starter.component';
 import { StarterRoutes } from './starter.routing';
 import { ConfirmComponent} from './confirm.component';
 import { CreateUserComponent } from './create-user/create-user.component';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule  } from '@angular/forms';
 
 @NgModule({
   imports: [
@@ -16,6 +16,7 @@ import { FormsModule } from '@angular/forms';
     FlexLayoutModule,
     RouterModule.forChild(StarterRoutes),
     FormsModule,
+    ReactiveFormsModule,
   ],
   declarations: [StarterComponent, ConfirmComponent, CreateUserComponent],
   entryComponents: [ConfirmComponent, CreateUserComponent],

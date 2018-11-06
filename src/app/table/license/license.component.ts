@@ -24,7 +24,7 @@ export class LicenseComponent implements AfterViewInit {
   dataSource: MatTableDataSource<LicenseData>;
   licenses: License[] = [];
   ea_id: string;
-  user_id: string;
+  user_id: number;
   isAdmin: boolean;
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
@@ -55,14 +55,14 @@ export class LicenseComponent implements AfterViewInit {
   }
 
   ngOnInit() {
-    this.route.params.subscribe(params => { this.ea_id = params['ea_id'],  this.user_id = params['user_id'] });
+    this.route.params.subscribe(params => { this.ea_id = params['ea_id'],  this.user_id = Number(params['user_id']) });
     console.log("ruby::::::: license ngOnInit-", this.ea_id, ", user_id ",this.user_id);
     this.isAdmin = Common.isAdmin();
     if(!this.isAdmin && Common.getUser().id.toString() != this.user_id){
       this.toastr.errorToastr('The account list is not accessable.', 'Error', {animate: "slideFromTop"});
       this.router.navigate(['/table']);
     }
-    this.loadAllLicenses(this.ea_id);
+    this.loadAllLicenses(this.ea_id, this.user_id);
     
   }
 
@@ -81,7 +81,7 @@ export class LicenseComponent implements AfterViewInit {
         this.licenseService.delete(id).pipe(first()).subscribe(
           res => {
             this.toastr.successToastr('Successfully Deleted.', 'Success!', {animate: "slideFromTop"});
-            this.loadAllLicenses(this.ea_id);
+            this.loadAllLicenses(this.ea_id, this.user_id);
             // check for errors
           },
           error => {
@@ -92,8 +92,8 @@ export class LicenseComponent implements AfterViewInit {
     });
   }
 
-  private loadAllLicenses(ea_id: string) {
-      this.licenseService.getByEaId(ea_id).pipe(first()).subscribe(licenses => {
+  private loadAllLicenses(ea_id: string, user_id: number) {
+      this.licenseService.getByEaId(ea_id, user_id).pipe(first()).subscribe(licenses => {
         console.log("ruby: licenses from back", licenses);
           this.licenses = licenses.data;
           // Create 100 users
@@ -134,7 +134,7 @@ export class LicenseComponent implements AfterViewInit {
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      this.loadAllLicenses(this.ea_id);
+      this.loadAllLicenses(this.ea_id, this.user_id);
     });
   }
 
@@ -151,7 +151,7 @@ export class LicenseComponent implements AfterViewInit {
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      this.loadAllLicenses(this.ea_id);
+      this.loadAllLicenses(this.ea_id, this.user_id);
     });
   }
 }
