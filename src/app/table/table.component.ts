@@ -77,7 +77,7 @@ export class TableComponent implements AfterViewInit {
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      if(result === true){
+      if (result === true) {
         this.eaproductService.delete(id).pipe(first()).subscribe(
           res => {
             this.toastr.successToastr('Successfully Deleted.', 'Success!', {animate: "slideFromTop"});
@@ -95,7 +95,6 @@ export class TableComponent implements AfterViewInit {
   loadAllEaProducts() {
       this.eaproductService.getUserEaProducts().pipe(first()).subscribe(ea_products => {
           this.ea_products = ea_products.data;
-          
           const eadata: EAData[] = [];
           for (let i = 0; i < this.ea_products.length; i++) {
             eadata.push({
@@ -112,7 +111,7 @@ export class TableComponent implements AfterViewInit {
           this.dataSource = new MatTableDataSource(eadata);
           this.dataSource.paginator = this.paginator;
           this.dataSource.sort = this.sort;
-          if(this.initSearchValue && this.isFirst) {
+          if (this.initSearchValue && this.isFirst) {
             this.applyFilter(this.initSearchValue);
             this.isFirst = false;
           }

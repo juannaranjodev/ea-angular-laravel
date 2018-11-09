@@ -21,6 +21,7 @@ export class CreateEaProductComponent {
   email: string;
   currentUser: any;
   loading: boolean;
+  flagAddUser: boolean;
   constructor(
     public dialogRef: MatDialogRef<CreateEaProductComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any,
@@ -32,9 +33,10 @@ export class CreateEaProductComponent {
   ngOnInit() {
     this.currentUser = Common.getUser();
     console.log("ruby test: create table, cur user", this.data);
-    this.newEaId = this.data.newEaId || "";
-    this.newEaName = this.data.newEaName || "";
-    this.newParameter = this.data.newParameter || "";
+    this.newEaId = this.data.newEaId || '';
+    this.newEaName = this.data.newEaName || '';
+    this.newParameter = this.data.newParameter || '';
+    this.flagAddUser = this.newEaId !== '';
     this.loadUsers();
     this.loading = false;
   }
@@ -74,7 +76,7 @@ export class CreateEaProductComponent {
         // check for errors
       },
       error => {
-          console.log('ruby : failed to save ea product');
+          console.log('ruby : failed to save ea product', error);
           this.toastr.errorToastr('There might be some problems.', 'Error', {animate: "slideFromTop"});
       });
   }

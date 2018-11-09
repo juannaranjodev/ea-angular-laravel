@@ -64,11 +64,10 @@ export class ForgotComponent implements OnInit {
             }else {
               this.toastr.errorToastr('Sending reset email failed!', 'Error', {animate: "slideFromTop"});
             }
-            
 
         },
         error => {
-            console.log('ray : failed to login');
+            console.log('ray : failed to send reset email');
             // this.warningMessage = "Invalid Credentials!";
             // this.error = error;
             this.loading = false;
