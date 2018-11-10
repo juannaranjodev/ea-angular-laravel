@@ -46,11 +46,15 @@ export class ResetPasswordComponent implements OnInit {
     });
   }
 
+  urldecode(text) {
+    return decodeURIComponent((text + '').replace(/\+/g, '%20'));
+  }
+
   onSubmit() {
     // ruby test <
     this.route.params.subscribe(params => { this.tokenParam = params['id']; });
     let array1 = this.tokenParam.split('_FAI35_');
-    let email = atob(array1[0]);
+    let email = this.urldecode(array1[0]);//atob(array1[0]);
     let md_password = array1[1];
    
     if(this.form.invalid){
